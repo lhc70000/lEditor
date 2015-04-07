@@ -1,0 +1,140 @@
+@import url('font-awesome/css/font-awesome.min.css');
+
+body {
+    padding-top: 40px;
+}
+
+#bar {
+    height: 40px;
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+}
+
+.lEditor-container {
+/*
+    border-top: 1px solid #aaa;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+*/
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+
+.lEditor-toolbar {
+    background-color: #ddd;
+    border-bottom: 1px solid #aaa;
+    padding: 10px 5px;
+}
+
+.lEditor-button-group {
+    display: inline-block;
+    margin: 0 2px;
+    border-right: 1px solid #aaa;
+    padding-right: 4px;
+}
+
+.lEditor-button-group:last-child {
+    border: none;
+    padding-right: 0;
+}
+
+.lEditor-button {
+    color: #444;
+    display: inline-block;
+    width: 20px;
+    height: 16px;
+    margin: 0 1px;
+    padding: 2px 4px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lEditor-button:hover, .lEditor-button-hilighted {
+/*    text-shadow: 0 0 8px #999;*/
+    background-color: #333;
+    color: #ccc;
+}
+
+.lEditor-button-hilighted {
+    
+}
+
+.lEditor-font-container {
+    display: inline-block;
+    margin: 0 1px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.lEditor-font-text {
+    display: inline-block;
+    font-size: 14px;
+    height: 16px;
+    margin: 0;
+    padding: 2px 0;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+.lEditor-font-text:focus {
+    
+}
+
+.lEditor-font-div {
+    font-size: 14px;
+    width: 125px;
+    height: 150px;
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    box-shadow: 0 0 8px #aaa;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.lEditor-font-list {
+    margin: 2px 0;
+    padding: 0 5px;
+    list-style: none;
+}
+
+.lEditor-font-list li {
+    padding: 2px 1px;
+    cursor: pointer;
+}
+
+.lEditor-font-list li:hover {
+    background-color: #bbb;
+}
+
+.lEditor-color-div {
+    width: 140px;
+    height: 140px;
+    padding: 4px;
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    box-shadow: 0 0 8px #aaa;
+    overflow-y: scroll;
+}
+
+.lEditor-color-box {
+    display: inline-block;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    margin: 2px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.lEditor-color-box:hover {
+    box-shadow: 0 0 4px #555;
+}
