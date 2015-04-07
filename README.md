@@ -6,7 +6,9 @@ A clean text editor.
 Initial version. Basic support on text format.
 
 # usage
-just one line:
+first include `lEditor.js` and `lEditor.css`
+
+then add one more line:
 
 `$(a-div).lEditor();`
 
