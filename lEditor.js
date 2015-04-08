@@ -1,7 +1,7 @@
 /**
  * lEditor
- * v 0.3.0
- * by lhc (lhc199652(at)gmail.com)
+ * v 0.4.0
+ * by lhc (lhc199652@gmail.com)
  */
 
 (function(window, document, undefined){
@@ -63,9 +63,9 @@
             return lbutton;
         },
         // builder for font picker
-        fontPicker: function(){
+        fontPicker: function(initFont){
             var fontPickerContainer = $('<div class="lEditor-font-container"></div>'),
-                fontPickerText = $('<div class="lEditor-font-text" style="width: 60px;font-family:' + fonts[defaultFont] + '">'+defaultFont+'</div>'),
+                fontPickerText = $('<div class="lEditor-font-text" style="width: 60px;font-family:' + fonts[initFont] + '">'+initFont+'</div>'),
                 fontPickerButton = $('<div class="lEditor-button"></div>'),
                 fontPickerIcon = $('<i class="fa fa-angle-down"></i>');
             fontPickerButton.append(fontPickerIcon);
@@ -73,9 +73,9 @@
             return fontPickerContainer;
         },
         // builder for font size picker
-        fontSizePicker: function(){
+        fontSizePicker: function(initFontSize){
             var fontSizePickerContainer = $('<div class="lEditor-font-container"></div>'),
-                fontSizePickerText = $('<div class="lEditor-font-text" style="width: 12px;">' + defaultFontSize + '</div>'),
+                fontSizePickerText = $('<div class="lEditor-font-text" style="width: 12px;">' + initFontSize + '</div>'),
                 fontSizePickerButton = $('<div class="lEditor-button"></div>'),
                 fontSizePickerIcon = $('<i class="fa fa-angle-down"></i>');
             fontSizePickerButton.append(fontSizePickerIcon);
@@ -134,20 +134,27 @@
         lEditor: function(options){
             /* options handling*/
             options = options || [];
-            defaultHeight = options.height || '200px';
-            defaultFont = options.font || 'Arial';
-            defaultFontSize = options.font_size || 4;
-            defaultColor = options.color || '#000';
-            defaultBgColor = options.bg_color || '#fff';
-            defaultToolBar = options.toolbar || ['undo', 'font', 'style', 'color', 'align', 'list', 'link', 'insert'];
+            var initHeight = options.height || '200px',
+                initFont = options.font || 'Arial',
+                initFontSize = options.font_size || 4,
+                initColor = options.color || '#000',
+                initBgColor = options.bg_color || '#fff',
+                initToolBar = options.toolbar || ['undo', 'font', 'style', 'color', 'align', 'list', 'link', 'insert'],
+                initFullScreen = options.full_screen || false,
+                initExitFullScreen = options.exit_full_screen || false, // private
+                initFatherDocument = options.father_document || undefined, // private
+                initText = options.text || '',
+                initCallback = options.callback || undefined,
+                initButtonSize = options.button_size || undefined;
             
             /* build container */
             var lcontainer;
-            lcontainer = $('<div class="lEditor-container" width="100%" style="height:' + defaultHeight + '"></div>');
+            lcontainer = $('<div class="lEditor-container" width="100%" style="height:' + initHeight + '"></div>');
             this.append(lcontainer);
             
             /* build toolbar */
             var ltoobar,
+                lbuttonFullScreen,
                 lbuttonUndo, lbuttonRepeat,
                 lfontPicker, lfontSizePicker,
                 lbuttonBold, lbuttonItalic, lbuttonUnderline,
@@ -169,53 +176,58 @@
                 };
             ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>');
             
-            /* */
-            for (var item in defaultToolBar) {
-                if (defaultToolBar[item] == 'undo'){
+            /* - */
+            if (initFullScreen){
+                lbuttonFullScreen = builders.button('expand');
+                lbuttonFullScreen.css('float', 'right');
+                ltoobar.append(lbuttonFullScreen);
+            }
+            for (var item in initToolBar) {
+                if (initToolBar[item] == 'undo'){
                     //---undo-redo
                     btnExist.undo = true;
                     lbuttonUndo = builders.button('undo');
                     lbuttonRepeat = builders.button('repeat');
                     ltoobar.append(builders.buttonGroup([lbuttonUndo, lbuttonRepeat]));
-                } else if (defaultToolBar[item] == 'font'){
+                } else if (initToolBar[item] == 'font'){
                     //---font
                     btnExist.font = true;
-                    lfontPicker = builders.fontPicker();
-                    lfontSizePicker = builders.fontSizePicker();
+                    lfontPicker = builders.fontPicker(initFont);
+                    lfontSizePicker = builders.fontSizePicker(initFontSize);
                     ltoobar.append(builders.buttonGroup([lfontPicker, lfontSizePicker]));
-                } else if (defaultToolBar[item] == 'style'){
+                } else if (initToolBar[item] == 'style'){
                     //---style
                     btnExist.style = true;
                     lbuttonBold = builders.button('bold');
                     lbuttonItalic = builders.button('italic');
                     lbuttonUnderline = builders.button('underline');
                     ltoobar.append(builders.buttonGroup([lbuttonBold, lbuttonItalic, lbuttonUnderline]));
-                } else if (defaultToolBar[item] == 'color'){
+                } else if (initToolBar[item] == 'color'){
                     //---color
                     btnExist.color = true;
-                    lbuttonColor = builders.colorPicker('font', 'color', defaultColor);
-                    lbuttonBgColor = builders.colorPicker('font', 'background-color', defaultBgColor);
+                    lbuttonColor = builders.colorPicker('font', 'color', initColor);
+                    lbuttonBgColor = builders.colorPicker('font', 'background-color', initBgColor);
                     ltoobar.append(builders.buttonGroup([lbuttonColor, lbuttonBgColor]));
-                } else if (defaultToolBar[item] == 'align'){
+                } else if (initToolBar[item] == 'align'){
                     //---align
                     btnExist.align = true;
                     lbuttonAlignLeft = builders.button('align-left');
                     lbuttonAlignCenter = builders.button('align-center');
                     lbuttonAlignRight = builders.button('align-right');
                     ltoobar.append(builders.buttonGroup([lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight]));
-                } else if (defaultToolBar[item] == 'list'){
+                } else if (initToolBar[item] == 'list'){
                     //---list
                     btnExist.list = true;
                     lbuttonUl = builders.button('list-ul');
                     lbuttonOl = builders.button('list-ol');
                     ltoobar.append(builders.buttonGroup([lbuttonUl, lbuttonOl]));
-                } else if (defaultToolBar[item] == 'link'){
+                } else if (initToolBar[item] == 'link'){
                     //---link
                     btnExist.link = true;
                     lbuttonLink = builders.button('link');
                     lbuttonDelLink = builders.button('chain-broken');
                     ltoobar.append(builders.buttonGroup([lbuttonLink, lbuttonDelLink]));
-                } else if (defaultToolBar[item] == 'insert'){
+                } else if (initToolBar[item] == 'insert'){
                     //---insert
                     btnExist.insert = true;
                     lbuttonImage = builders.button('image');
@@ -224,6 +236,10 @@
                 }
             }
             lcontainer.append(ltoobar);
+            
+            if (initButtonSize){
+                $('.lEditor-button, .lEditor-font-text').css('font-size', initButtonSize);
+            }
             
             /* build iframe */
             var lframeContainer,
@@ -247,7 +263,7 @@
                                 '    <meta charset="UTF-8">'+
                                 '    <title>lEditor</title>'+
                                 '    <style>'+
-                                '    body{font-family:'+fonts[defaultFont]+'}'+
+                                '    body{font-family:'+fonts[initFont]+'}'+
                                 '    pre{'+
                                 '    background-color: #eee;'+
                                 '    padding: 10px;'+
@@ -255,12 +271,13 @@
                                 '    }</style>'+
                                 '</head>'+
                                 '<body>'+
+                                initText+
                                 '</body>'+
                                 '</html>');
             frameDocument.close();
             frameDocument.designMode = "on";
-            frameDocument.execCommand('fontSize', false, defaultFontSize);
-            frameDocument.execCommand('fontName', false, fonts[defaultFont]);
+            frameDocument.execCommand('fontSize', false, initFontSize);
+            frameDocument.execCommand('fontName', false, fonts[initFont]);
             window.onload = function () {
                 if (frameDocument.designMode.toLowerCase() === 'off') {
                     frameDocument.designMode = 'on';
@@ -268,7 +285,9 @@
             };
             
             /* set listeners */
-            var selectedText;
+            var selectedText, 
+                // the innerhtml code
+                HTMLCode = initText;
             
             /* - function collection */
             var funcs = {
@@ -308,6 +327,8 @@
                     })
                 },
                 moved: function(e){
+                    funcs.saveText();
+                    
                     keyCodes = [8, 13, 46, 33, 34, 35, 36, 37, 38, 39, 40];
                     if (e.type !== 'click' && 
                         !((e.type === 'keyup') && (keyCodes.indexOf(e.keyCode) != -1)))
@@ -352,6 +373,13 @@
                         $(this).remove();
                     });
 
+                },
+                saveText: function(){
+                    HTMLCode = frameDocument.body.innerHTML;
+                    if (initCallback){
+                        console.log('callback');
+                        initCallback.call(this, HTMLCode);
+                    }
                 },
                 undo: function(){
                     frameDocument.execCommand('undo');
@@ -555,16 +583,49 @@
                     sel += '<br>';
                     var codeHtml = '<pre>' + sel + '</pre>';
                     utils.insertHTML(frameWindow, frameDocument, codeHtml);
+                },
+                fullScreen: function(){
+                    var size = {
+                        height: $(document).height(),
+                        width: $(document).width()
+                    };
+                    var fullScreenDiv = $('<div class="lEditor-full-div"></div>');
+                    fullScreenDiv.css({
+                        'position': 'fixed',
+                        'top': '0',
+                        'left': '0',
+                        'width': size.width +'px',
+                        'height': size.height +'px'
+                    }).hide();
+                    $('body').append(fullScreenDiv).addClass('fullscreen-mode');
+                    fullScreenDiv.lEditor({
+                        full_screen: true,
+                        exit_full_screen: true,
+                        height: size.height + 'px',
+                        text: HTMLCode,
+                        father_document: frameDocument
+                    });
+                    fullScreenDiv.fadeIn(300);
+                },
+                exitFullScreen: function(){
+                    initFatherDocument.body.innerHTML = HTMLCode;
+                    $('body').removeClass('fullscreen-mode');
+                    $('.lEditor-full-div').fadeOut(300, function(){
+                        $(this).remove();
+                    });
                 }
             };
             
             /* - text area */
             lframeWindow.click(funcs.moved)
                 .keypress(funcs.keyPress)
-                .keyup(funcs.moved);
+                .keyup(funcs.moved)
+                .blur(funcs.saveText);
             lframeDocument.find('body').keyup(funcs.addBr);
             
             /* - buttons */
+            ltoobar.click(funcs.saveText);
+            
             if (btnExist.undo){
                 lbuttonUndo.click(funcs.undo);
                 lbuttonRepeat.click(funcs.redo);
@@ -598,6 +659,11 @@
             if (btnExist.insert){
                 lbuttonImage.click(funcs.image);
                 lbuttonCode.click(funcs.insertCode);
+            }
+            if (initExitFullScreen){
+                lbuttonFullScreen.click(funcs.exitFullScreen);
+            } else if (initFullScreen){
+                lbuttonFullScreen.click(funcs.fullScreen);
             }
         }
     });
