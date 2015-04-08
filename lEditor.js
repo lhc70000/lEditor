@@ -1,6 +1,6 @@
 /**
  * lEditor
- * v 0.4.1
+ * v 0.4.3
  * by lhc (lhc199652@gmail.com)
  */
 
@@ -57,8 +57,8 @@
         },
         // builder for buttons
         button: function(icon){
-            var lbutton = $('<div class="lEditor-button"></div>'),
-                licon = $('<i class="fa fa-' + icon + '"></i>');
+            var lbutton = $('<div class="lEditor-button" unselectable="on"></div>'),
+                licon = $('<i class="fa fa-' + icon + '" unselectable="on"></i>');
             lbutton.append(licon);
             return lbutton;
         },
@@ -146,8 +146,8 @@
                 initText = options.text || '',
                 initCallback = options.callback || undefined,
                 initButtonSize = options.button_size || undefined,
-                initFrameBgColor = options.textarea_bg_color || '#fff',
-                initToolBarBgColor = options.toolbar_bg_color || '#ddd';
+                initFrameBgColor = options.textarea_bg_color || undefined,
+                initToolBarBgColor = options.toolbar_bg_color || undefined;
             
             /* build container */
             var lcontainer;
@@ -281,20 +281,24 @@
                                 '</html>');
             frameDocument.close();
             frameDocument.designMode = "on";
-            frameDocument.execCommand('fontSize', false, initFontSize);
-            frameDocument.execCommand('fontName', false, fonts[initFont]);
             window.onload = function () {
                 if (frameDocument.designMode.toLowerCase() === 'off') {
                     frameDocument.designMode = 'on';
                 }
+                frameDocument.execCommand('fontSize', false, initFontSize);
+                frameDocument.execCommand('fontName', false, fonts[initFont]);
             };
             
             /* set appearance */
             if (initButtonSize){
                 lcontainer.find('.lEditor-button, .lEditor-font-text').css('font-size', initButtonSize);
             }
-            lcontainer.find('.lEditor-frame').css('background-color', initFrameBgColor);
-            lcontainer.find('.lEditor-toolbar').css('background-color', initToolBarBgColor);
+            if (initFrameBgColor){
+                lcontainer.find('.lEditor-frame').css('background-color', initFrameBgColor);
+            }
+            if (initToolBarBgColor){
+                lcontainer.find('.lEditor-toolbar').css('background-color', initToolBarBgColor);
+            }
             
             /* set listeners */
             var selectedText, 
@@ -389,7 +393,6 @@
                 saveText: function(){
                     HTMLCode = frameDocument.body.innerHTML;
                     if (initCallback){
-                        console.log('callback');
                         initCallback.call(this, HTMLCode);
                     }
                 },
@@ -539,8 +542,10 @@
                     linkOKButton.click(function(){
                         var url = linkUrl.val(),
                             sel = frameDocument.getSelection();
+                        console.log(sel);
                         // for opera and IE
-                        if (!sel || sel.anchorOffset === 0) {
+                        if (sel.rangeCount === 0) {
+                            console.log("aaa");
                             sel.removeAllRanges();
                             sel.addRange(selectedText);
                         }
@@ -568,10 +573,10 @@
                         var url = linkUrl.val(),
                             sel = frameDocument.getSelection();
                         // for opera and IE
-                        if (!sel || sel.anchorOffset === 0) {
-                            sel.removeAllRanges();
-                            sel.addRange(selectedText);
-                        }
+//                        if (!sel || sel.anchorOffset === 0) {
+//                            sel.removeAllRanges();
+//                            sel.addRange(selectedText);
+//                        }
                         if (!(url.startsWith('http://') || url.startsWith('https://')))
                             url = 'http://' + url;
                         frameDocument.execCommand('insertImage', false, url);
@@ -588,10 +593,10 @@
                 insertCode: function(){
                     var sel = frameDocument.getSelection();
                     // for opera and IE
-                    if (!sel || sel.anchorOffset === 0) {
-                        sel.removeAllRanges();
-                        sel.addRange(selectedText);
-                    }
+//                    if (!sel || sel.anchorOffset === 0) {
+//                        sel.removeAllRanges();
+//                        sel.addRange(selectedText);
+//                    }
                     sel += '<br>';
                     var codeHtml = '<pre>' + sel + '</pre>';
                     utils.insertHTML(frameWindow, frameDocument, codeHtml);
@@ -603,6 +608,7 @@
                     frameDocument.body.innerHTML = '';
                 },
                 fullScreen: function(){
+                    $('body').addClass('fullscreen-mode');
                     var size = {
                         height: $(document).height(),
                         width: $(document).width()
@@ -615,7 +621,7 @@
                         'width': size.width +'px',
                         'height': size.height +'px'
                     }).hide();
-                    $('body').append(fullScreenDiv).addClass('fullscreen-mode');
+                    $('body').append(fullScreenDiv);
                     fullScreenDiv.lEditor({
                         full_screen: true,
                         exit_full_screen: true,
