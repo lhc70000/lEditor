@@ -66,6 +66,17 @@ body {
     
 }
 
+.lEditor-font-div, .lEditor-color-div, .lEditor-link-div {
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    box-shadow: 0 0 8px #aaa;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+/* font */
+
 .lEditor-font-container {
     display: inline-block;
     margin: 0 1px;
@@ -91,12 +102,6 @@ body {
     font-size: 14px;
     width: 125px;
     height: 150px;
-    background-color: #eee;
-    border: 1px solid #aaa;
-    border-radius: 2px;
-    box-shadow: 0 0 8px #aaa;
-    overflow-x: hidden;
-    overflow-y: scroll;
 }
 
 .lEditor-font-list {
@@ -114,15 +119,12 @@ body {
     background-color: #bbb;
 }
 
+/* color */
+
 .lEditor-color-div {
     width: 140px;
     height: 140px;
     padding: 4px;
-    background-color: #eee;
-    border: 1px solid #aaa;
-    border-radius: 2px;
-    box-shadow: 0 0 8px #aaa;
-    overflow-y: scroll;
 }
 
 .lEditor-color-box {
@@ -137,4 +139,48 @@ body {
 
 .lEditor-color-box:hover {
     box-shadow: 0 0 4px #555;
+}
+
+/* link */
+
+.lEditor-input-text {
+    font-size: 14px;
+    width: 100%;
+    height: 20px;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    padding: 2px 0;
+    vertical-align: middle;
+}
+
+.lEditor-input-text:focus {
+    outline: none;
+    box-shadow: 0 0 4px #999;
+}
+
+.lEditor-okbutton {
+    color: #fff;
+    width: 100%;
+    height: 20px;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    background-color: #00cc86;
+    margin-top: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.lEditor-okbutton:hover {
+    background-color: #00a069;
+}
+
+.lEditor-link-div {
+    width: 150px;
+    height: 75px;
+    padding: 8px;
+}
+
+.lEditor-link-div h4 {
+    font-size: 14px;
+    margin: 0;
 }

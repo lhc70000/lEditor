@@ -31,6 +31,14 @@
         '#800', '#884400', '#880', '#448800', '#080', '#008844', '#088', '#004488', '#008'
     ];
     
+    /* other initialization */
+    // add startsWith method to String
+    if (typeof String.prototype.startsWith != 'function') {
+        String.prototype.startsWith = function (str){
+            return this.indexOf(str) == 0;
+        };
+    }
+    
     /* builders for buttons and button groups */
     var builders = {
         // builder for button groups
@@ -101,7 +109,8 @@
                 lbuttonBold, lbuttonItalic, lbuttonUnderline,
                 lbuttonColor, lbuttonBgColor,
                 lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight,
-                lbuttonOl, lbuttonUl;
+                lbuttonOl, lbuttonUl,
+                lbuttonLink, lbuttonDelLink;
             ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>');
             //---
             lbuttonUndo = builders.button('undo');
@@ -129,6 +138,10 @@
             lbuttonUl = builders.button('list-ul');
             lbuttonOl = builders.button('list-ol');
             ltoobar.append(builders.buttonGroup([lbuttonUl, lbuttonOl]));
+            //---
+            lbuttonLink = builders.button('link');
+            lbuttonDelLink = builders.button('chain-broken');
+            ltoobar.append(builders.buttonGroup([lbuttonLink, lbuttonDelLink]));
             //---
             lcontainer.append(ltoobar);
             
@@ -161,6 +174,7 @@
             frameDocument.designMode = "on";
             
             /* set listeners */
+            var selectedText;
             
             /* - function collection */
             var funcs = {
@@ -200,7 +214,9 @@
                     else
                         lbuttonAlignRight.removeClass('lEditor-button-hilighted');
                     
-                    $('.lEditor-font-div, .lEditor-color-div').slideUp(200, function(){
+                    selectedText = frameDocument.getSelection().getRangeAt(0);
+                    
+                    $('.lEditor-font-div, .lEditor-color-div, .lEditor-link-div').slideUp(200, function(){
                         $(this).remove();
                     });
 
@@ -343,6 +359,33 @@
                 },
                 unorderList: function(){
                     frameDocument.execCommand('insertUnorderedList');   
+                },
+                insertLink: function(){
+                    var linkDiv = $('<div class="lEditor-link-div"></div>'),
+                        linkUrl = $('<input type="text" class="lEditor-input-text"></div>'),
+                        linkOKButton = $('<div class="lEditor-okbutton">OK</div>');
+                    linkOKButton.click(function(){
+                        var url = linkUrl.val(),
+                            sel = frameDocument.getSelection();
+                        if (!sel || sel.anchorOffset === 0) {
+                            sel.removeAllRanges();
+                            sel.addRange(selectedText);
+                        }
+                        if (!(url.startsWith('http://') || url.startsWith('https://')))
+                            url = 'http://' + url;
+                        frameDocument.execCommand('createLink', false, url);
+                        linkDiv.slideUp(200, function(){
+                            $(this).remove();
+                        });
+                    });
+                    linkDiv.append($('<h4>URL:</h4>')).append(linkUrl).append(linkOKButton).hide();
+                    $('body').append(linkDiv);
+                    linkDiv.slideDown(200);
+                    var pos = lbuttonLink.offset();
+                    linkDiv.offset(pos);
+                },
+                delLink: function(){
+                    frameDocument.execCommand('unLink');
                 }
             };
             
@@ -365,6 +408,8 @@
             lbuttonBgColor.click(funcs.changeBgColor);
             lbuttonOl.click(funcs.orderList);
             lbuttonUl.click(funcs.unorderList);
+            lbuttonLink.click(funcs.insertLink);
+            lbuttonDelLink.click(funcs.delLink);
         }
     });
 })(window, document);
