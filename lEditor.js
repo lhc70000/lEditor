@@ -146,8 +146,8 @@
                 initText = options.text || '',
                 initCallback = options.callback || undefined,
                 initButtonSize = options.button_size || undefined,
-                initFrameBgColor = options.textarea_bg_color || '#fff',
-                initToolBarBgColor = options.toolbar_bg_color || '#ddd';
+                initFrameBgColor = options.textarea_bg_color || undefined,
+                initToolBarBgColor = options.toolbar_bg_color || undefined;
             
             /* build container */
             var lcontainer;
@@ -293,8 +293,12 @@
             if (initButtonSize){
                 lcontainer.find('.lEditor-button, .lEditor-font-text').css('font-size', initButtonSize);
             }
-            lcontainer.find('.lEditor-frame').css('background-color', initFrameBgColor);
-            lcontainer.find('.lEditor-toolbar').css('background-color', initToolBarBgColor);
+            if (initFrameBgColor){
+                lcontainer.find('.lEditor-frame').css('background-color', initFrameBgColor);
+            }
+            if (initToolBarBgColor){
+                lcontainer.find('.lEditor-toolbar').css('background-color', initToolBarBgColor);
+            }
             
             /* set listeners */
             var selectedText, 

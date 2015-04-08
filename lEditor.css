@@ -20,6 +20,7 @@ body.fullscreen-mode {
 
 
 .lEditor-toolbar {
+    background-color: #ddd;
     border-bottom: 1px solid #aaa;
     padding: 10px 5px;
     overflow-x: scroll;
@@ -184,6 +185,7 @@ body.fullscreen-mode {
 }
 
 .lEditor-frame {
+    background-color: #fff;
     border: none;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
