@@ -23,7 +23,7 @@ body.fullscreen-mode {
     background-color: #ddd;
     border-bottom: 1px solid #aaa;
     padding: 10px 5px;
-    overflow-x: scroll;
+    overflow-x: auto;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
@@ -72,7 +72,7 @@ body.fullscreen-mode {
     border-radius: 2px;
     box-shadow: 0 0 8px #aaa;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 /* font */
