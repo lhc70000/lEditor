@@ -134,13 +134,6 @@
         lEditor: function(options){
             /* options handling*/
             options = options || [];
-<<<<<<< HEAD
-            defaultHeight = options.height || '200px';
-            defaultFont = options.font || 'Arial';
-            defaultFontSize = options.font_size || 4;
-            defaultColor = options.color || '#000';
-            defaultBgColor = options.bg_color || '#fff';
-=======
             var initHeight = options.height || '200px',
                 initFont = options.font || 'Arial',
                 initFontSize = options.font_size || 4,
@@ -153,7 +146,6 @@
                 initText = options.text || '',
                 initCallback = options.callback || undefined,
                 initButtonSize = options.button_size || undefined;
->>>>>>> gh-pages
             
             /* build container */
             var lcontainer;
@@ -183,43 +175,6 @@
                     'insert': false
                 };
             ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>');
-<<<<<<< HEAD
-            //---
-            lbuttonUndo = builders.button('undo');
-            lbuttonRepeat = builders.button('repeat');
-            ltoobar.append(builders.buttonGroup([lbuttonUndo, lbuttonRepeat]));
-            //---
-            lfontPicker = builders.fontPicker();
-            lfontSizePicker = builders.fontSizePicker();
-            ltoobar.append(builders.buttonGroup([lfontPicker, lfontSizePicker]));
-            //---
-            lbuttonBold = builders.button('bold');
-            lbuttonItalic = builders.button('italic');
-            lbuttonUnderline = builders.button('underline');
-            ltoobar.append(builders.buttonGroup([lbuttonBold, lbuttonItalic, lbuttonUnderline]));
-            //---
-            lbuttonColor = builders.colorPicker('font', 'color', defaultColor);
-            lbuttonBgColor = builders.colorPicker('font', 'background-color', defaultBgColor);
-            ltoobar.append(builders.buttonGroup([lbuttonColor, lbuttonBgColor]));
-            //---
-            lbuttonAlignLeft = builders.button('align-left');
-            lbuttonAlignCenter = builders.button('align-center');
-            lbuttonAlignRight = builders.button('align-right');
-            ltoobar.append(builders.buttonGroup([lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight]));
-            //---
-            lbuttonUl = builders.button('list-ul');
-            lbuttonOl = builders.button('list-ol');
-            ltoobar.append(builders.buttonGroup([lbuttonUl, lbuttonOl]));
-            //---
-            lbuttonLink = builders.button('link');
-            lbuttonDelLink = builders.button('chain-broken');
-            ltoobar.append(builders.buttonGroup([lbuttonLink, lbuttonDelLink]));
-            //---
-            lbuttonImage = builders.button('image');
-            lbuttonCode = builders.button('code');
-            ltoobar.append(builders.buttonGroup([lbuttonImage, lbuttonCode]));
-            //---
-=======
             
             /* - */
             if (initFullScreen){
@@ -280,7 +235,6 @@
                     ltoobar.append(builders.buttonGroup([lbuttonImage, lbuttonCode]));
                 }
             }
->>>>>>> gh-pages
             lcontainer.append(ltoobar);
             
             if (initButtonSize){
