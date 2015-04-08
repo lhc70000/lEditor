@@ -1,6 +1,6 @@
 /**
  * lEditor
- * v 0.4.4
+ * v 0.4.5
  * by lhc (lhc199652@gmail.com)
  */
 
@@ -65,7 +65,7 @@
         // builder for font picker
         fontPicker: function(initFont){
             var fontPickerContainer = $('<div class="lEditor-font-container"></div>'),
-                fontPickerText = $('<div class="lEditor-font-text" style="width: 60px;font-family:' + fonts[initFont] + '">'+initFont+'</div>'),
+                fontPickerText = $('<div class="lEditor-font-text" style="width: 80px;">'+initFont+'</div>'),
                 fontPickerButton = $('<div class="lEditor-button"></div>'),
                 fontPickerIcon = $('<i class="fa fa-angle-down"></i>');
             fontPickerButton.append(fontPickerIcon);
@@ -454,7 +454,7 @@
                             var fontCss = $(this).css('font-family');
                             var fontName = $(this).text();
                             frameDocument.execCommand('fontName', false, fontCss);
-                            lfontPicker.find('.lEditor-font-text').css('font-family', fontCss).text(fontName);
+                            lfontPicker.find('.lEditor-font-text').text(fontName);
                             fontPickerDiv.slideUp(200, function(){
                                 $(this).remove();
                             });

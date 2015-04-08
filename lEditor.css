@@ -90,6 +90,7 @@ body.fullscreen-mode {
     padding: 2px 0;
     vertical-align: middle;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .lEditor-font-text:focus {
