@@ -142,7 +142,7 @@
             
             /* build container */
             var lcontainer;
-            lcontainer = $('<div class="lEditor-container" width="100%" height="' + defaultHeight + '"></div>');
+            lcontainer = $('<div class="lEditor-container" width="100%" style="height:' + defaultHeight + '"></div>');
             this.append(lcontainer);
             
             /* build toolbar */
@@ -197,11 +197,12 @@
             var lframeContainer,
                 lframe,
                 frameWindow, lframeWindow,
-                frameDocument, lframeDocument,
-                frameHeight = options.height || '200px';
-            lframeContainer = $('<div class="lEditor-frame-container" width="100%" height="' + frameHeight + '"></div>');
+                frameDocument, lframeDocument;
+            lframeContainer = $('<div class="lEditor-frame-container" width="100%" style="height:'+
+                                (lcontainer.innerHeight() - ltoobar.outerHeight())+
+                                'px"></div>');
             lcontainer.append(lframeContainer);
-            lframe = $('<iframe frameborder="0" width="100%" height="100%"></iframe>');
+            lframe = $('<iframe class="lEditor-frame" frameborder="0" width="100%" height="100%"></iframe>');
             lframeContainer.append(lframe);
             frameWindow = lframe[0].contentWindow;
             lframeWindow = $(frameWindow);
