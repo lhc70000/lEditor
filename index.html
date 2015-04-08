@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="lEditor.js"></script>
+    <script>
+    $(window).load(function(){
+        $("#container").lEditor({height:'300px'});
+    });
+    </script>
+    <style>
+        @font-face {
+          font-family: 'Open Sans';
+          font-style: normal;
+          font-weight: 300;
+          src: local('Open Sans Light'), local('OpenSans-Light'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+        }
+        @font-face {
+          font-family: 'Open Sans';
+          font-style: normal;
+          font-weight: 400;
+          src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+        }
+        body {
+            font-family: 'Open Sans', helvetica, arial, sans-serif;
+            color: #fff;
+            background-color: #9401f0;
+            background-attachment: fixed !important;
+            background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #9401F0), color-stop(100%, #6BC1F0));
+            background: -webkit-linear-gradient(#9401F0, #6BC1F0);
+            background: -moz-linear-gradient(#9401F0, #6BC1F0);
+            background: -o-linear-gradient(#9401F0, #6BC1F0);
+            background: -ms-linear-gradient(#9401F0, #6BC1F0);
+            background: linear-gradient(#9401F0, #6BC1F0);
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        h1 {
+            font-size: 100px;
+            margin: 40px 0 10px 0;
+        }
+        h2 {
+            display: inline-block;
+            font-size: 40px;
+            height: 60px;
+            border-radius: 40px;
+            background-color: rgba(50,50,50,0.4);
+            padding: 0 10px;
+            box-shadow: 0 1px 2px #555 inset;
+        }
+        p {
+            font-size: 20px;
+        }
+        #container {
+            margin: 40px auto;
+            width: 800px;
+            box-shadow: 0 0 16px #555;
+        }
+        .contents {
+            text-align: left;
+            margin: 0 auto;
+        }
+        code{
+            font-size: 20px;
+            background-color: rgba(255,255,255,0.5);
+            border-radius: 4px;
+            padding: 2px 4px;
+        }
+        dt, dd {
+            font-size: 20px;
+            height: 28px;
+            margin: 10px 0;
+        }
+        dt {
+            display: inline-block;
+            background-color: rgba(0, 216, 108, 0.5);
+            border-radius: 14px;
+            padding: 0 10px;
+        }
+        dd {
+            display: inline;
+        }
+        footer {
+            font-size: 12px;
+            padding: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            background-color: rgba(255,255,255,0.2);
+        }
+    </style>
+    <link rel="stylesheet" href="lEditor.css"></style>
+</head>
+<body>
+    <h1>lEditor</h1>
+    <p>A clean text editor</p>
+    <div id="container"></div>
+    <h2>Usage</h2>
+    <div class="contents" style="width:500px;">
+        <p>0. It uses jQuery</p>
+        <p>1. Include <code>lEditor.js</code> and <code>lEditor.css</code></p>
+        <p>2. Bind <code>$(a-div).lEditor();</code> to onload event</p>
+        <p>3. It's possible to add more options:
+        <code style="display:block">
+        $(a-div).lEditor({ <br>&nbsp;&nbsp;&nbsp;&nbsp;height: '300px', <br>&nbsp;&nbsp;&nbsp;&nbsp;color: '#ff0' <br>});
+        </code></p>
+    </div>
+    
+    <h2>Options</h2>
+    <div class="contents" style="width:600px;">
+    <dl>
+        <dt>height</dt> <dd>a css height string, the total height of the editor</dd><br>
+        <dt>font</dt> <dd>initial text font, default is <code>Simsun</code></dd><br>
+        <dt>font_size</dt> <dd>initial text font size, a number from 1 - 7, default is 4.</dd><br>
+        <dt>color</dt> <dd>initial text color, default is <code>#000</code></dd><br>
+        <dt>bg_color</dt> <dd>initial text background color, default is <code>#fff</code></dd><br>
+    </dl>
+    </div>
+    <footer>
+        by lhc (lhc199652@gmail.com)
+    </footer>
+</body>
+</html>
