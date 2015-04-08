@@ -130,12 +130,13 @@
     </div>
     
     <h2>Options</h2>
-    <div class="contents" style="width:600px;">
+    <div class="contents" style="width:700px;">
     <dl>
         <h3>editor appearance</h3>
-        <dt>height</dt> <dd>a css size string, the total height of the editor</dd><br>
-        
-        <h3>text appearance</h3>
+        <dt>height</dt> <dd>a css size string, the total height of the editor, default is <code>200px</code></dd><br>
+        <dt>textarea_bg_color</dt> <dd>background color for the text area, default is <code>#fff</code></dd>
+        <dt>toolbar_bg_color</dt> <dd>background color for the toolbar, default id <code>#ddd</code></dd>
+        <h3>text initialization</h3>
         <dt>text</dt> <dd>initial text in the editor. HTML tags are also ok.</dd><br>
         <dt>font</dt> <dd>initial text font, default is <code>Arial</code></dd><br>
         <dt>font_size</dt> <dd>initial text font size, a number from 1 - 7, default is 4.</dd><br>
@@ -147,14 +148,15 @@
         <dd>
         layout of button groups in the toolbar, default layout is as the top one. It accecpts an array of strings. possible strings:<br>
         <div style="width: 500px;margin:10px auto;line-height:28px;"> 
-            <code>undo</code>  (undo/redo), <br>
-            <code>font</code>  (name/size), <br>
-            <code>style</code>  (b/i/u), <br>
-            <code>color</code>  (fore/background), <br>
-            <code>align</code>  (left/center/right), <br>
-            <code>list</code>  (ul/ol), <br>
-            <code>link</code>  (add/remove),<br>
-            <code>insert</code>  (img, code)
+            <code>undo</code>  ( undo / redo )<br>
+            <code>font</code>  ( name / size ) <br>
+            <code>style</code>  ( b / i / u ) <br>
+            <code>color</code>  ( fore / background )<br>
+            <code>align</code>  ( left / center / right ) <br>
+            <code>list</code>  ( ul / ol ) <br>
+            <code>link</code>  ( add / remove )<br>
+            <code>insert</code>  ( img / code )<br>
+            <code>remove</code> ( clear format / clear all )
         </div>
         </dd>
         <dt>button_size</dt> <dd>a css size string for the button size, default is <code>14px</code></dd><br>

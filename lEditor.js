@@ -1,6 +1,6 @@
 /**
  * lEditor
- * v 0.4.0
+ * v 0.4.1
  * by lhc (lhc199652@gmail.com)
  */
 
@@ -139,13 +139,15 @@
                 initFontSize = options.font_size || 4,
                 initColor = options.color || '#000',
                 initBgColor = options.bg_color || '#fff',
-                initToolBar = options.toolbar || ['undo', 'font', 'style', 'color', 'align', 'list', 'link', 'insert'],
+                initToolBar = options.toolbar || ['undo', 'font', 'style', 'color', 'align', 'list', 'link', 'insert', 'remove'],
                 initFullScreen = options.full_screen || false,
                 initExitFullScreen = options.exit_full_screen || false, // private
                 initFatherDocument = options.father_document || undefined, // private
                 initText = options.text || '',
                 initCallback = options.callback || undefined,
-                initButtonSize = options.button_size || undefined;
+                initButtonSize = options.button_size || undefined,
+                initFrameBgColor = options.textarea_bg_color || '#fff',
+                initToolBarBgColor = options.toolbar_bg_color || '#ddd';
             
             /* build container */
             var lcontainer;
@@ -163,6 +165,7 @@
                 lbuttonOl, lbuttonUl,
                 lbuttonLink, lbuttonDelLink,
                 lbuttonImage, lbuttonCode,
+                lbuttonRemoveFormat, lbuttonCLear,
                 // whether button group exist
                 btnExist = {
                     'undo': false,
@@ -172,7 +175,8 @@
                     'align': false,
                     'list': false,
                     'link':false,
-                    'insert': false
+                    'insert': false,
+                    'remove': false
                 };
             ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>');
             
@@ -233,13 +237,14 @@
                     lbuttonImage = builders.button('image');
                     lbuttonCode = builders.button('code');
                     ltoobar.append(builders.buttonGroup([lbuttonImage, lbuttonCode]));
+                } else if (initToolBar[item] == 'remove'){
+                    btnExist.remove = true;
+                    lbuttonRemoveFormat = builders.button('eraser');
+                    lbuttonCLear = builders.button('trash');
+                    ltoobar.append(builders.buttonGroup([lbuttonRemoveFormat, lbuttonCLear]));
                 }
             }
             lcontainer.append(ltoobar);
-            
-            if (initButtonSize){
-                $('.lEditor-button, .lEditor-font-text').css('font-size', initButtonSize);
-            }
             
             /* build iframe */
             var lframeContainer,
@@ -283,6 +288,13 @@
                     frameDocument.designMode = 'on';
                 }
             };
+            
+            /* set appearance */
+            if (initButtonSize){
+                lcontainer.find('.lEditor-button, .lEditor-font-text').css('font-size', initButtonSize);
+            }
+            lcontainer.find('.lEditor-frame').css('background-color', initFrameBgColor);
+            lcontainer.find('.lEditor-toolbar').css('background-color', initToolBarBgColor);
             
             /* set listeners */
             var selectedText, 
@@ -584,6 +596,12 @@
                     var codeHtml = '<pre>' + sel + '</pre>';
                     utils.insertHTML(frameWindow, frameDocument, codeHtml);
                 },
+                removeFormat: function(){
+                    frameDocument.execCommand('removeFormat');
+                },
+                clear: function(){
+                    frameDocument.body.innerHTML = '';
+                },
                 fullScreen: function(){
                     var size = {
                         height: $(document).height(),
@@ -602,6 +620,8 @@
                         full_screen: true,
                         exit_full_screen: true,
                         height: size.height + 'px',
+                        textarea_bg_color: '#f0efd6',
+                        toolbar_bg_color: '#dedece',
                         text: HTMLCode,
                         father_document: frameDocument
                     });
@@ -659,6 +679,10 @@
             if (btnExist.insert){
                 lbuttonImage.click(funcs.image);
                 lbuttonCode.click(funcs.insertCode);
+            }
+            if (btnExist.remove){
+                lbuttonRemoveFormat.click(funcs.removeFormat);
+                lbuttonCLear.click(funcs.clear);
             }
             if (initExitFullScreen){
                 lbuttonFullScreen.click(funcs.exitFullScreen);
