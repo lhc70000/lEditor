@@ -1,6 +1,6 @@
 /**
  * lEditor
- * v 0.4.3
+ * v 0.4.4
  * by lhc (lhc199652@gmail.com)
  */
 
@@ -316,7 +316,7 @@
                             if (sel.getRangeAt && sel.rangeCount){
                                 range = sel.getRangeAt(0);
                                 range.deleteContents();
-                                var br = document.createElement("br");
+                                var br = frameDocument.createElement("br");
                                 range.insertNode(br);
                                 range.setStartAfter(br);
                                 range.setEndAfter(br);
@@ -337,7 +337,7 @@
                 },
                 addBr: function() {
                     lframeDocument.find('body, pre').each(function(){
-                        if (this.lastChild.nodeName.toLowerCase() != "br") {
+                        if (!this.lastChild || this.lastChild.nodeName.toLowerCase() != "br") {
                             this.appendChild(document.createElement("br"));
                         }
                     })
