@@ -1,16 +1,5 @@
 @import url('font-awesome/css/font-awesome.min.css');
 
-body {
-    padding-top: 40px;
-}
-
-#bar {
-    height: 40px;
-    position: fixed;
-    top:0;
-    left: 0;
-    right: 0;
-}
 
 .lEditor-container {
 /*
@@ -28,6 +17,7 @@ body {
     background-color: #ddd;
     border-bottom: 1px solid #aaa;
     padding: 10px 5px;
+    overflow-x: scroll;
 }
 
 .lEditor-button-group {
@@ -149,6 +139,7 @@ body {
     height: 20px;
     border: 1px solid #aaa;
     border-radius: 2px;
+    margin-top: 4px;
     padding: 2px 0;
     vertical-align: middle;
 }

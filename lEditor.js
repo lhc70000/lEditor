@@ -1,3 +1,9 @@
+/**
+ * lEditor
+ * v 0.3.0
+ * by lhc (lhc199652(at)gmail.com)
+ */
+
 (function(window, document, undefined){
     
     /* presets for fonts */
@@ -86,6 +92,43 @@
         }
     };
     
+    /* other functions */
+    var utils = {
+        insertHTML: function(window, document, html){
+            var sel, range;
+            if (window.getSelection) {
+                // IE9 and non-IE
+                sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    range = sel.getRangeAt(0);
+                    range.deleteContents();
+
+                    // Range.createContextualFragment() would be useful here but is
+                    // non-standard and not supported in all browsers (IE9, for one)
+                    var el = document.createElement("div");
+                    el.innerHTML = html;
+                    var frag = document.createDocumentFragment(), node, lastNode;
+                    while ( (node = el.firstChild) ) {
+                        lastNode = frag.appendChild(node);
+                    }
+                    range.insertNode(frag);
+
+                    // Preserve the selection
+                    if (lastNode) {
+                        range = range.cloneRange();
+                        range.setStartAfter(lastNode);
+                        range.collapse(true);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                }
+            } else if (document.selection && document.selection.type != "Control") {
+                // IE < 9
+                document.selection.createRange().pasteHTML(html);
+            }
+        }
+    };
+    
     /* jQuery extention */
     jQuery.fn.extend({
         lEditor: function(options){
@@ -110,7 +153,8 @@
                 lbuttonColor, lbuttonBgColor,
                 lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight,
                 lbuttonOl, lbuttonUl,
-                lbuttonLink, lbuttonDelLink;
+                lbuttonLink, lbuttonDelLink,
+                lbuttonImage, lbuttonCode;
             ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>');
             //---
             lbuttonUndo = builders.button('undo');
@@ -143,6 +187,10 @@
             lbuttonDelLink = builders.button('chain-broken');
             ltoobar.append(builders.buttonGroup([lbuttonLink, lbuttonDelLink]));
             //---
+            lbuttonImage = builders.button('image');
+            lbuttonCode = builders.button('code');
+            ltoobar.append(builders.buttonGroup([lbuttonImage, lbuttonCode]));
+            //---
             lcontainer.append(ltoobar);
             
             /* build iframe */
@@ -165,23 +213,70 @@
                                 '<head>'+
                                 '    <meta charset="UTF-8">'+
                                 '    <title>lEditor</title>'+
+                                '    <style>'+
+                                '    pre{'+
+                                '    background-color: #eee;'+
+                                '    padding: 10px;'+
+                                '    border-radius: 4px;'+
+                                '    }</style>'+
                                 '</head>'+
                                 '<body>'+
                                 '</body>'+
                                 '</html>');
             frameDocument.close();
-            frameDocument.execCommand('fontSize', false, defaultFontSize);
             frameDocument.designMode = "on";
+            frameDocument.execCommand('fontSize', false, defaultFontSize);
+            frameDocument.execCommand('fontName', false, defaultFont);
+            window.onload = function () {
+                if (frameDocument.designMode.toLowerCase() === 'off') {
+                    frameDocument.designMode = 'on';
+                }
+            };
             
             /* set listeners */
             var selectedText;
             
             /* - function collection */
             var funcs = {
-                frameListener: function(e){
-
+                keyPress: function(e){
+                    /* for enter key, insert a br instead a div */
+                    if (e.keyCode == 13){
+                        var sel, range;
+                        if (frameWindow.getSelection) {
+                            sel = frameWindow.getSelection();
+                            if (sel.getRangeAt && sel.rangeCount){
+                                range = sel.getRangeAt(0);
+                                range.deleteContents();
+                                var br = document.createElement("br");
+                                range.insertNode(br);
+                                range.setStartAfter(br);
+                                range.setEndAfter(br);
+                                sel.removeAllRanges();
+                                sel.addRange(range);
+                            }
+                        }
+                        e.preventDefault();
+                    }
+                    /* for del key, delete the pre */
+                    if (e.keyCode == 8 || e.keyCode == 46){
+                        var sel, range;
+                        if (frameWindow.getSelection) {
+                            sel = frameWindow.getSelection();
+                            console.log(sel);
+                        }
+                    }
+                },
+                addBr: function() {
+                    lframeDocument.find('body, pre').each(function(){
+                        if (this.lastChild.nodeName.toLowerCase() != "br") {
+                            this.appendChild(document.createElement("br"));
+                        }
+                    })
+                },
+                moved: function(e){
+                    keyCodes = [8, 13, 46, 33, 34, 35, 36, 37, 38, 39, 40];
                     if (e.type !== 'click' && 
-                        !((e.type === 'keyup') && (e.keyCode >= 33 && e.keyCode <= 40)))
+                        !((e.type === 'keyup') && (keyCodes.indexOf(e.keyCode) != -1)))
                         return;
                     //
                     if (frameDocument.queryCommandState('bold'))
@@ -367,6 +462,7 @@
                     linkOKButton.click(function(){
                         var url = linkUrl.val(),
                             sel = frameDocument.getSelection();
+                        // for opera and IE
                         if (!sel || sel.anchorOffset === 0) {
                             sel.removeAllRanges();
                             sel.addRange(selectedText);
@@ -378,7 +474,7 @@
                             $(this).remove();
                         });
                     });
-                    linkDiv.append($('<h4>URL:</h4>')).append(linkUrl).append(linkOKButton).hide();
+                    linkDiv.append($('<h4>Link URL:</h4>')).append(linkUrl).append(linkOKButton).hide();
                     $('body').append(linkDiv);
                     linkDiv.slideDown(200);
                     var pos = lbuttonLink.offset();
@@ -386,12 +482,50 @@
                 },
                 delLink: function(){
                     frameDocument.execCommand('unLink');
+                },
+                image: function(){
+                    var linkDiv = $('<div class="lEditor-link-div"></div>'),
+                        linkUrl = $('<input type="text" class="lEditor-input-text"></div>'),
+                        linkOKButton = $('<div class="lEditor-okbutton">OK</div>');
+                    linkOKButton.click(function(){
+                        var url = linkUrl.val(),
+                            sel = frameDocument.getSelection();
+                        // for opera and IE
+                        if (!sel || sel.anchorOffset === 0) {
+                            sel.removeAllRanges();
+                            sel.addRange(selectedText);
+                        }
+                        if (!(url.startsWith('http://') || url.startsWith('https://')))
+                            url = 'http://' + url;
+                        frameDocument.execCommand('insertImage', false, url);
+                        linkDiv.slideUp(200, function(){
+                            $(this).remove();
+                        });
+                    });
+                    linkDiv.append($('<h4>Image URL:</h4>')).append(linkUrl).append(linkOKButton).hide();
+                    $('body').append(linkDiv);
+                    linkDiv.slideDown(200);
+                    var pos = lbuttonLink.offset();
+                    linkDiv.offset(pos);
+                },
+                insertCode: function(){
+                    var sel = frameDocument.getSelection();
+                    // for opera and IE
+                    if (!sel || sel.anchorOffset === 0) {
+                        sel.removeAllRanges();
+                        sel.addRange(selectedText);
+                    }
+                    sel += '<br>';
+                    var codeHtml = '<pre>' + sel + '</pre>';
+                    utils.insertHTML(frameWindow, frameDocument, codeHtml);
                 }
             };
             
             /* - text area */
-            lframeWindow.click(funcs.frameListener);
-            lframeWindow.keyup(funcs.frameListener);
+            lframeWindow.click(funcs.moved)
+                .keypress(funcs.keyPress)
+                .keyup(funcs.moved);
+            lframeDocument.find('body').keyup(funcs.addBr);
             
             /* - buttons */
             lbuttonUndo.click(funcs.undo);
@@ -410,6 +544,8 @@
             lbuttonUl.click(funcs.unorderList);
             lbuttonLink.click(funcs.insertLink);
             lbuttonDelLink.click(funcs.delLink);
+            lbuttonImage.click(funcs.image);
+            lbuttonCode.click(funcs.insertCode);
         }
     });
 })(window, document);
