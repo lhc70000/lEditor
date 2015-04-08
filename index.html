@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <title>lEditor</title>
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="lEditor.js"></script>
     <script>
     $(window).load(function(){
-        $("#container").lEditor({height:'300px'});
+        $('#container').lEditor({height:'300px'});
+        $('#demo1').lEditor({
+            height: '150px',
+            toolbar: ['undo', 'style'],
+            font: 'Georgia'
+        });
     });
     </script>
     <style>
@@ -90,6 +95,7 @@
             border-top: 1px solid #eee;
             background-color: rgba(255,255,255,0.2);
         }
+        a{color:#fff}
     </style>
     <link rel="stylesheet" href="lEditor.css"></style>
 </head>
@@ -112,7 +118,7 @@
     <div class="contents" style="width:600px;">
     <dl>
         <dt>height</dt> <dd>a css height string, the total height of the editor</dd><br>
-        <dt>font</dt> <dd>initial text font, default is <code>Simsun</code></dd><br>
+        <dt>font</dt> <dd>initial text font, default is <code>Arial</code></dd><br>
         <dt>font_size</dt> <dd>initial text font size, a number from 1 - 7, default is 4.</dd><br>
         <dt>color</dt> <dd>initial text color, default is <code>#000</code></dd><br>
         <dt>bg_color</dt> <dd>initial text background color, default is <code>#fff</code></dd><br>
@@ -132,8 +138,10 @@
         </dd>
     </dl>
     </div>
+    <h2>Demos</h2>
+    <div id="demo1" style="width: 300px;margin: 0 auto"></div>
     <footer>
-        by lhc (lhc199652@gmail.com)
+        by lhc (lhc199652@gmail.com) | <a href="//github.com/lhc70000/lEditor">View on github</a>
     </footer>
 </body>
 </html>

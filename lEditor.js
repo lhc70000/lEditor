@@ -65,7 +65,7 @@
         // builder for font picker
         fontPicker: function(){
             var fontPickerContainer = $('<div class="lEditor-font-container"></div>'),
-                fontPickerText = $('<div class="lEditor-font-text" style="width: 60px;font-family:' + defaultFont + '">宋体</div>'),
+                fontPickerText = $('<div class="lEditor-font-text" style="width: 60px;font-family:' + fonts[defaultFont] + '">'+defaultFont+'</div>'),
                 fontPickerButton = $('<div class="lEditor-button"></div>'),
                 fontPickerIcon = $('<i class="fa fa-angle-down"></i>');
             fontPickerButton.append(fontPickerIcon);
@@ -135,7 +135,7 @@
             /* options handling*/
             options = options || [];
             defaultHeight = options.height || '200px';
-            defaultFont = options.font || 'Simsun';
+            defaultFont = options.font || 'Arial';
             defaultFontSize = options.font_size || 4;
             defaultColor = options.color || '#000';
             defaultBgColor = options.bg_color || '#fff';
@@ -155,50 +155,69 @@
                 lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight,
                 lbuttonOl, lbuttonUl,
                 lbuttonLink, lbuttonDelLink,
-                lbuttonImage, lbuttonCode;
+                lbuttonImage, lbuttonCode,
+                // whether button group exist
+                btnExist = {
+                    'undo': false,
+                    'font': false,
+                    'style': false,
+                    'color': false,
+                    'align': false,
+                    'list': false,
+                    'link':false,
+                    'insert': false
+                };
             ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>');
             
             /* */
             for (var item in defaultToolBar) {
                 if (defaultToolBar[item] == 'undo'){
                     //---undo-redo
+                    btnExist.undo = true;
                     lbuttonUndo = builders.button('undo');
                     lbuttonRepeat = builders.button('repeat');
                     ltoobar.append(builders.buttonGroup([lbuttonUndo, lbuttonRepeat]));
                 } else if (defaultToolBar[item] == 'font'){
                     //---font
+                    btnExist.font = true;
                     lfontPicker = builders.fontPicker();
                     lfontSizePicker = builders.fontSizePicker();
                     ltoobar.append(builders.buttonGroup([lfontPicker, lfontSizePicker]));
                 } else if (defaultToolBar[item] == 'style'){
                     //---style
+                    btnExist.style = true;
                     lbuttonBold = builders.button('bold');
                     lbuttonItalic = builders.button('italic');
                     lbuttonUnderline = builders.button('underline');
                     ltoobar.append(builders.buttonGroup([lbuttonBold, lbuttonItalic, lbuttonUnderline]));
                 } else if (defaultToolBar[item] == 'color'){
                     //---color
+                    btnExist.color = true;
                     lbuttonColor = builders.colorPicker('font', 'color', defaultColor);
                     lbuttonBgColor = builders.colorPicker('font', 'background-color', defaultBgColor);
                     ltoobar.append(builders.buttonGroup([lbuttonColor, lbuttonBgColor]));
                 } else if (defaultToolBar[item] == 'align'){
                     //---align
+                    btnExist.align = true;
                     lbuttonAlignLeft = builders.button('align-left');
                     lbuttonAlignCenter = builders.button('align-center');
                     lbuttonAlignRight = builders.button('align-right');
                     ltoobar.append(builders.buttonGroup([lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight]));
                 } else if (defaultToolBar[item] == 'list'){
                     //---list
+                    btnExist.list = true;
                     lbuttonUl = builders.button('list-ul');
                     lbuttonOl = builders.button('list-ol');
                     ltoobar.append(builders.buttonGroup([lbuttonUl, lbuttonOl]));
                 } else if (defaultToolBar[item] == 'link'){
                     //---link
+                    btnExist.link = true;
                     lbuttonLink = builders.button('link');
                     lbuttonDelLink = builders.button('chain-broken');
                     ltoobar.append(builders.buttonGroup([lbuttonLink, lbuttonDelLink]));
                 } else if (defaultToolBar[item] == 'insert'){
                     //---insert
+                    btnExist.insert = true;
                     lbuttonImage = builders.button('image');
                     lbuttonCode = builders.button('code');
                     ltoobar.append(builders.buttonGroup([lbuttonImage, lbuttonCode]));
@@ -228,6 +247,7 @@
                                 '    <meta charset="UTF-8">'+
                                 '    <title>lEditor</title>'+
                                 '    <style>'+
+                                '    body{font-family:'+fonts[defaultFont]+'}'+
                                 '    pre{'+
                                 '    background-color: #eee;'+
                                 '    padding: 10px;'+
@@ -240,7 +260,7 @@
             frameDocument.close();
             frameDocument.designMode = "on";
             frameDocument.execCommand('fontSize', false, defaultFontSize);
-            frameDocument.execCommand('fontName', false, defaultFont);
+            frameDocument.execCommand('fontName', false, fonts[defaultFont]);
             window.onload = function () {
                 if (frameDocument.designMode.toLowerCase() === 'off') {
                     frameDocument.designMode = 'on';
@@ -292,36 +312,39 @@
                     if (e.type !== 'click' && 
                         !((e.type === 'keyup') && (keyCodes.indexOf(e.keyCode) != -1)))
                         return;
-                    //
-                    if (frameDocument.queryCommandState('bold'))
-                        lbuttonBold.addClass('lEditor-button-hilighted');
-                    else
-                        lbuttonBold.removeClass('lEditor-button-hilighted');
-                    //
-                    if (frameDocument.queryCommandState('italic'))
-                        lbuttonItalic.addClass('lEditor-button-hilighted');
-                    else
-                        lbuttonItalic.removeClass('lEditor-button-hilighted');
-                    //
-                    if (frameDocument.queryCommandState('underline'))
-                        lbuttonUnderline.addClass('lEditor-button-hilighted');
-                    else
-                        lbuttonUnderline.removeClass('lEditor-button-hilighted');
-                    //
-                    if (frameDocument.queryCommandState('JustifyLeft'))
-                        lbuttonAlignLeft.addClass('lEditor-button-hilighted');
-                    else
-                        lbuttonAlignLeft.removeClass('lEditor-button-hilighted');
-                    //
-                    if (frameDocument.queryCommandState('JustifyCenter'))
-                        lbuttonAlignCenter.addClass('lEditor-button-hilighted');
-                    else
-                        lbuttonAlignCenter.removeClass('lEditor-button-hilighted');
-                    //
-                    if (frameDocument.queryCommandState('JustifyRight'))
-                        lbuttonAlignRight.addClass('lEditor-button-hilighted');
-                    else
-                        lbuttonAlignRight.removeClass('lEditor-button-hilighted');
+                    
+                    if (btnExist.style){
+                        if (frameDocument.queryCommandState('bold'))
+                            lbuttonBold.addClass('lEditor-button-hilighted');
+                        else
+                            lbuttonBold.removeClass('lEditor-button-hilighted');
+                        //
+                        if (frameDocument.queryCommandState('italic'))
+                            lbuttonItalic.addClass('lEditor-button-hilighted');
+                        else
+                            lbuttonItalic.removeClass('lEditor-button-hilighted');
+                        //
+                        if (frameDocument.queryCommandState('underline'))
+                            lbuttonUnderline.addClass('lEditor-button-hilighted');
+                        else
+                            lbuttonUnderline.removeClass('lEditor-button-hilighted');
+                    }
+                    if (btnExist.align){
+                        if (frameDocument.queryCommandState('JustifyLeft'))
+                            lbuttonAlignLeft.addClass('lEditor-button-hilighted');
+                        else
+                            lbuttonAlignLeft.removeClass('lEditor-button-hilighted');
+                        //
+                        if (frameDocument.queryCommandState('JustifyCenter'))
+                            lbuttonAlignCenter.addClass('lEditor-button-hilighted');
+                        else
+                            lbuttonAlignCenter.removeClass('lEditor-button-hilighted');
+                        //
+                        if (frameDocument.queryCommandState('JustifyRight'))
+                            lbuttonAlignRight.addClass('lEditor-button-hilighted');
+                        else
+                            lbuttonAlignRight.removeClass('lEditor-button-hilighted');
+                    }
                     
                     selectedText = frameDocument.getSelection().getRangeAt(0);
                     
@@ -542,24 +565,40 @@
             lframeDocument.find('body').keyup(funcs.addBr);
             
             /* - buttons */
-            lbuttonUndo.click(funcs.undo);
-            lbuttonRepeat.click(funcs.redo);
-            lbuttonBold.click(funcs.bold);
-            lbuttonItalic.click(funcs.italic);
-            lbuttonUnderline.click(funcs.underline);
-            lbuttonAlignLeft.click(funcs.alignLeft);
-            lbuttonAlignCenter.click(funcs.alignCenter);
-            lbuttonAlignRight.click(funcs.alignRight);
-            lfontPicker.find('.lEditor-button').click(funcs.changeFontFace);
-            lfontSizePicker.find('.lEditor-button').click(funcs.changeFontSize);
-            lbuttonColor.click(funcs.changeColor);
-            lbuttonBgColor.click(funcs.changeBgColor);
-            lbuttonOl.click(funcs.orderList);
-            lbuttonUl.click(funcs.unorderList);
-            lbuttonLink.click(funcs.insertLink);
-            lbuttonDelLink.click(funcs.delLink);
-            lbuttonImage.click(funcs.image);
-            lbuttonCode.click(funcs.insertCode);
+            if (btnExist.undo){
+                lbuttonUndo.click(funcs.undo);
+                lbuttonRepeat.click(funcs.redo);
+            }
+            if (btnExist.style){
+                lbuttonBold.click(funcs.bold);
+                lbuttonItalic.click(funcs.italic);
+                lbuttonUnderline.click(funcs.underline);
+            }
+            if (btnExist.align){
+                lbuttonAlignLeft.click(funcs.alignLeft);
+                lbuttonAlignCenter.click(funcs.alignCenter);
+                lbuttonAlignRight.click(funcs.alignRight);
+            }
+            if (btnExist.font){
+                lfontPicker.find('.lEditor-button').click(funcs.changeFontFace);
+                lfontSizePicker.find('.lEditor-button').click(funcs.changeFontSize);
+            }
+            if (btnExist.color){
+                lbuttonColor.click(funcs.changeColor);
+                lbuttonBgColor.click(funcs.changeBgColor);
+            }
+            if (btnExist.list){
+                lbuttonOl.click(funcs.orderList);
+                lbuttonUl.click(funcs.unorderList);
+            }
+            if (btnExist.link){
+                lbuttonLink.click(funcs.insertLink);
+                lbuttonDelLink.click(funcs.delLink);
+            }
+            if (btnExist.insert){
+                lbuttonImage.click(funcs.image);
+                lbuttonCode.click(funcs.insertCode);
+            }
         }
     });
 })(window, document);

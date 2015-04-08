@@ -21,6 +21,8 @@
     border-bottom: 1px solid #aaa;
     padding: 10px 5px;
     overflow-x: scroll;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
 }
 
 .lEditor-button-group {
@@ -172,7 +174,7 @@
 
 .lEditor-link-div {
     width: 150px;
-    height: 75px;
+    height: 84px;
     padding: 8px;
 }
 
@@ -184,5 +186,7 @@
 .lEditor-frame {
     background-color: #fff;
     border: none;
-    border-width: 0;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    
 }
