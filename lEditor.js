@@ -135,12 +135,15 @@
             /* options handling*/
             options = options || [];
 <<<<<<< HEAD
+<<<<<<< HEAD
             defaultHeight = options.height || '200px';
             defaultFont = options.font || 'Arial';
             defaultFontSize = options.font_size || 4;
             defaultColor = options.color || '#000';
             defaultBgColor = options.bg_color || '#fff';
 =======
+=======
+>>>>>>> gh-pages
             var initHeight = options.height || '200px',
                 initFont = options.font || 'Arial',
                 initFontSize = options.font_size || 4,
@@ -153,6 +156,9 @@
                 initText = options.text || '',
                 initCallback = options.callback || undefined,
                 initButtonSize = options.button_size || undefined;
+<<<<<<< HEAD
+>>>>>>> gh-pages
+=======
 >>>>>>> gh-pages
             
             /* build container */
