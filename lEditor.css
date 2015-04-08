@@ -1,5 +1,8 @@
 @import url('font-awesome/css/font-awesome.min.css');
 
+body.fullscreen-mode {
+    overflow: hidden;
+}
 
 .lEditor-container {
 /*
@@ -40,10 +43,10 @@
 .lEditor-button {
     color: #444;
     display: inline-block;
-    width: 20px;
-    height: 16px;
+/*    width: 20px;*/
+/*    height: 16px;*/
     margin: 0 1px;
-    padding: 2px 4px;
+    padding: 2px 6px;
     text-align: center;
     vertical-align: middle;
     border-radius: 2px;
@@ -77,14 +80,12 @@
 .lEditor-font-container {
     display: inline-block;
     margin: 0 1px;
-    height: 20px;
     vertical-align: middle;
 }
 
 .lEditor-font-text {
     display: inline-block;
     font-size: 14px;
-    height: 16px;
     margin: 0;
     padding: 2px 0;
     vertical-align: middle;
@@ -188,5 +189,5 @@
     border: none;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
-    
+    box-shadow: 0 0 2px #ddd inset;
 }
