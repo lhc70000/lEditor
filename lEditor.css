@@ -20,6 +20,7 @@ body.fullscreen-mode {
 
 
 .lEditor-toolbar {
+    color: #444; /* button color */
     background-color: #ddd;
     border-bottom: 1px solid #aaa;
     padding: 10px 5px;
@@ -41,7 +42,6 @@ body.fullscreen-mode {
 }
 
 .lEditor-button {
-    color: #444;
     display: inline-block;
 /*    width: 20px;*/
 /*    height: 16px;*/
