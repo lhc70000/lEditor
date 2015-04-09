@@ -668,22 +668,29 @@
                     });
                 },
                 hint: function(e){
-                    if (!hintDiv){
+                    if (hintDiv == null){
                         var pos = $(this).offset();
                         hintDiv = $('<div class="lEditor-hint-div">'+e.data.hint+'</div>');
                         $('body').append(hintDiv);
                         // move up / down
-                        if (pos.top >=20)
+                        console.log(pos.top);
+                        if (this.getBoundingClientRect().top >=20)
                             pos.top -= 20;
                         else pos.top += $(this).outerHeight()+5;
                         // make it at middle
                         pos.left -= (hintDiv.outerWidth() - $(this).outerWidth())/2;
-                        hintDiv.offset(pos).hide();
-                        hintDiv.fadeIn(200);
+                        hintDiv.css({
+                            top: pos.top,
+                            left: pos.left
+                        }).hide();
+                        console.log(hintDiv);
+                        hintDiv.show();
                     }
                 },
                 hideHint: function(){
-                    hintDiv.fadeOut(200, function(){
+                    var tempHintDiv = hintDiv;
+                    hintDiv = null;
+                    tempHintDiv.fadeOut(200, function(){
                         $(this).remove();
                     });
                     hintDiv = null;

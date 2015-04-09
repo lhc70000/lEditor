@@ -194,7 +194,9 @@ body.fullscreen-mode {
 }
 
 .lEditor-hint-div {
-    position: fixed;
+    position: absolute;
+    display: inline-block;
+    text-align: left;
     background-color: #111;
     border-radius: 2px;
     color: #fff;
