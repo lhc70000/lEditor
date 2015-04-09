@@ -86,7 +86,7 @@
         colorPicker: function(icon, type, color){
             var lbutton = $('<div class="lEditor-button"></div>'),
                 licon = $('<i class="fa fa-' + icon + '"></i>');
-            lbutton.css(type, color);
+            lbutton.css('color', color);
             lbutton.append(licon);
             return lbutton;
         }
@@ -210,8 +210,8 @@
                 } else if (initToolBar[item] == 'color'){
                     //---color
                     btnExist.color = true;
-                    lbuttonColor = builders.colorPicker('font', 'color', initColor);
-                    lbuttonBgColor = builders.colorPicker('font', 'background-color', initBgColor);
+                    lbuttonColor = builders.colorPicker('pencil', 'color', initColor);
+                    lbuttonBgColor = builders.colorPicker('paint-brush', 'background-color', initBgColor);
                     ltoobar.append(builders.buttonGroup([lbuttonColor, lbuttonBgColor]));
                 } else if (initToolBar[item] == 'align'){
                     //---align
@@ -507,13 +507,13 @@
                     var pos = lfontSizePicker.offset();
                     fontSizePickerDiv.offset(pos);
                 },
-                changeColor: function(){
+                changeColor: function(e){
                     var colorPickerDiv = $('<div class="lEditor-color-div"></div>');
                     for (var c in colors){
                         var colorBox = $('<div class="lEditor-color-box" style="background-color:' + colors[c] + '"></div');
                         colorBox.click(function(){
                             var color = $(this).css('background-color');
-                            frameDocument.execCommand('foreColor', false, color);
+                            frameDocument.execCommand(e.data.type, false, color);
                             lbuttonColor.css('color', color);
                             colorPickerDiv.slideUp(200, function(){
                                 $(this).remove();
@@ -525,26 +525,6 @@
                     $('body').append(colorPickerDiv);
                     colorPickerDiv.slideDown(200);
                     var pos = lbuttonColor.offset();
-                    colorPickerDiv.offset(pos);
-                },
-                changeBgColor: function(){
-                    var colorPickerDiv = $('<div class="lEditor-color-div"></div>');
-                    for (var c in colors){
-                        var colorBox = $('<div class="lEditor-color-box" style="background-color:' + colors[c] + '"></div');
-                        colorBox.click(function(){
-                            var color = $(this).css('background-color');
-                            frameDocument.execCommand('backColor', false, color);
-                            lbuttonBgColor.css('background-color', color);
-                            colorPickerDiv.slideUp(200, function(){
-                                $(this).remove();
-                            });
-                        });
-                        colorPickerDiv.append(colorBox);
-                    }
-                    colorPickerDiv.hide();
-                    $('body').append(colorPickerDiv);
-                    colorPickerDiv.slideDown(200);
-                    var pos = lbuttonBgColor.offset();
                     colorPickerDiv.offset(pos);
                 },
                 orderList: function(){
@@ -673,7 +653,6 @@
                         hintDiv = $('<div class="lEditor-hint-div">'+e.data.hint+'</div>');
                         $('body').append(hintDiv);
                         // move up / down
-                        console.log(pos.top);
                         if (this.getBoundingClientRect().top >=20)
                             pos.top -= 20;
                         else pos.top += $(this).outerHeight()+5;
@@ -683,7 +662,6 @@
                             top: pos.top,
                             left: pos.left
                         }).hide();
-                        console.log(hintDiv);
                         hintDiv.show();
                     }
                 },
@@ -717,17 +695,19 @@
                 lbuttonUnderline.click(funcs.underline).mouseover({hint:'underline'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.align){
-                lbuttonAlignLeft.click(funcs.alignLeft).mouseover({hint:'left'}, funcs.hint).mouseleave(funcs.hideHint);
-                lbuttonAlignCenter.click(funcs.alignCenter).mouseover({hint:'center'}, funcs.hint).mouseleave(funcs.hideHint);
-                lbuttonAlignRight.click(funcs.alignRight).mouseover({hint:'right'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonAlignLeft.click(funcs.alignLeft).mouseover({hint:'align left'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonAlignCenter.click(funcs.alignCenter).mouseover({hint:'align center'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonAlignRight.click(funcs.alignRight).mouseover({hint:'align right'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.font){
                 lfontPicker.find('.lEditor-button').click(funcs.changeFontFace);
                 lfontSizePicker.find('.lEditor-button').click(funcs.changeFontSize);
             }
             if (btnExist.color){
-                lbuttonColor.click(funcs.changeColor).mouseover({hint:'foreground color'}, funcs.hint).mouseleave(funcs.hideHint);
-                lbuttonBgColor.click(funcs.changeBgColor).mouseover({hint:'background color'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonColor.click({type:'foreColor'}, funcs.changeColor)
+                    .mouseover({hint:'foreground color'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonBgColor.click({type:'backColor'}, funcs.changeColor)
+                    .mouseover({hint:'background color'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.list){
                 lbuttonOl.click(funcs.orderList).mouseover({hint:'order list'}, funcs.hint).mouseleave(funcs.hideHint);

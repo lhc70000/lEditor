@@ -25,103 +25,20 @@
             });
         });
     </script>
-    <style>
-        @font-face {
-          font-family: 'Open Sans';
-          font-style: normal;
-          font-weight: 300;
-          src: local('Open Sans Light'), local('OpenSans-Light'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
-        }
-        @font-face {
-          font-family: 'Open Sans';
-          font-style: normal;
-          font-weight: 400;
-          src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
-        }
-        body {
-            font-family: 'Open Sans', helvetica, arial, sans-serif;
-            color: #fff;
-            background-color: #9401f0;
-            background-attachment: fixed !important;
-            background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6901F0), color-stop(100%, #09D5F0));
-            background: -webkit-linear-gradient(#6901F0, #09D5F0);
-            background: -moz-linear-gradient(#6901F0, #09D5F0);
-            background: -o-linear-gradient(#6901F0, #09D5F0);
-            background: -ms-linear-gradient(#6901F0, #09D5F0);
-            background: linear-gradient(#6901F0, #09D5F0);
-            text-align: center;
-            padding: 0;
-            margin: 0;
-        }
-        h1 {
-            font-size: 100px;
-            margin: 40px 0 10px 0;
-        }
-        h2 {
-            display: inline-block;
-            font-size: 40px;
-            height: 60px;
-            border-radius: 40px;
-            background-color: rgba(50,50,50,0.4);
-            padding: 0 10px;
-            box-shadow: 0 1px 2px #555 inset;
-        }
-        p {
-            font-size: 20px;
-        }
-        #container {
-            margin: 40px auto;
-            width: 800px;
-            box-shadow: 0 0 16px #555;
-        }
-        .contents {
-            text-align: left;
-            margin: 0 auto;
-        }
-        code{
-            font-size: 20px;
-            background-color: rgba(255,255,255,0.5);
-            border-radius: 4px;
-            padding: 2px 4px;
-        }
-        dt, dd {
-            font-size: 20px;
-            height: 28px;
-            margin: 10px 0;
-        }
-        dt {
-            display: inline-block;
-            background-color: rgba(0, 216, 108, 0.5);
-            border-radius: 14px;
-            padding: 0 10px;
-        }
-        dd {
-            display: inline;
-        }
-        h3 {
-            text-transform: uppercase;
-            font-size: 24px;
-            border-bottom: 1px solid #fff;
-        }
-        footer {
-            font-size: 12px;
-            padding: 10px;
-            margin-top: 20px;
-            border-top: 1px solid #eee;
-            background-color: rgba(255,255,255,0.2);
-        }
-        #demo1 {width: 300px;margin:0 auto}
-        #demo1_code {width: 300px;height:100px;margin:20px 0;padding:0;border:none}
-        #left {width:300px;height: 310px;display: inline-block;vertical-align: middle}
-        #right {width:410px;height:310px;display: inline-block;text-align: left;vertical-align: middle}
-        a{color:#fff}
-    </style>
-    <link rel="stylesheet" href="lEditor.css"></link>
+    <link rel="stylesheet" href="webpage/wp.css" />
+    <link rel="stylesheet" href="lEditor.css" />
 </head>
 <body>
+    <nav>
+        <div class="nav-item"><a href="#Usage">Usage</a></div>
+        <div class="nav-item"><a href="#Options">Options</a></div>
+        <div class="nav-item"><a href="#Demo">Demo</a></div>
+        <div class="nav-item"><a href="#About">About</a></div>
+    </nav>
     <h1>lEditor</h1>
-    <p>A clean text editor</p>
+    <p id="subtitle">A clean web text editor</p>
     <div id="container"></div>
+    <div id="Usage" class="anchor"></div>
     <h2>Usage</h2>
     <div class="contents" style="width:500px;">
         <p>0. It uses jQuery</p>
@@ -132,7 +49,7 @@
         $(a-div).lEditor({ <br>&nbsp;&nbsp;&nbsp;&nbsp;height: '300px', <br>&nbsp;&nbsp;&nbsp;&nbsp;color: '#ff0' <br>});
         </code></p>
     </div>
-    
+    <div id="Options" class="anchor"></div>
     <h2>Options</h2>
     <div class="contents" style="width:700px;">
     <dl>
@@ -172,6 +89,7 @@
         <dt>callback</dt> <dd>a function called when text changes. the function accepts a parameter which is the html code of the text.</dd>
     </dl>
     </div>
+    <div id="Demo" class="anchor"></div>
     <h2>Demo</h2>
     <div>
     <div id="left">
@@ -195,6 +113,7 @@
         </code>
     </div>
     </div>
+    <div id="about" class="anchor"></div>
     <footer>
         by lhc (lhc199652@gmail.com) | <a href="//github.com/lhc70000/lEditor">View on github</a>
     </footer>
