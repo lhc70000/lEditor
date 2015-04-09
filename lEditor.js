@@ -310,7 +310,8 @@
             /* set listeners */
             var selectedText, 
                 // the innerhtml code
-                HTMLCode = initText;
+                HTMLCode = initText,
+                hintDiv = null;
             
             /* - function collection */
             var funcs = {
@@ -602,10 +603,10 @@
                         });
                     });
                     linkDiv.append($('<h4>Image URL:</h4>')).append(linkUrl).append(linkOKButton).hide();
-                    $('body').append(linkDiv);
-                    linkDiv.slideDown(200);
                     var pos = lbuttonLink.offset();
                     linkDiv.offset(pos);
+                    $('body').append(linkDiv);
+                    linkDiv.slideDown(200);
                 },
                 insertCode: function(){
                     var sel = frameDocument.getSelection();
@@ -665,7 +666,28 @@
                     $('.lEditor-full-div').fadeOut(300, function(){
                         $(this).remove();
                     });
-                }
+                },
+                hint: function(e){
+                    if (!hintDiv){
+                        var pos = $(this).offset();
+                        hintDiv = $('<div class="lEditor-hint-div">'+e.data.hint+'</div>');
+                        $('body').append(hintDiv);
+                        // move up / down
+                        if (pos.top >=20)
+                            pos.top -= 20;
+                        else pos.top += $(this).outerHeight()+5;
+                        // make it at middle
+                        pos.left -= (hintDiv.outerWidth() - $(this).outerWidth())/2;
+                        hintDiv.offset(pos).hide();
+                        hintDiv.fadeIn(200);
+                    }
+                },
+                hideHint: function(){
+                    hintDiv.fadeOut(200, function(){
+                        $(this).remove();
+                    });
+                    hintDiv = null;
+                },
             };
             
             /* - text area */
@@ -679,47 +701,47 @@
             ltoobar.click(funcs.saveText);
             
             if (btnExist.undo){
-                lbuttonUndo.click(funcs.undo);
-                lbuttonRepeat.click(funcs.redo);
+                lbuttonUndo.click(funcs.undo).mouseover({hint:'undo'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonRepeat.click(funcs.redo).mouseover({hint:'redo'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.style){
-                lbuttonBold.click(funcs.bold);
-                lbuttonItalic.click(funcs.italic);
-                lbuttonUnderline.click(funcs.underline);
+                lbuttonBold.click(funcs.bold).mouseover({hint:'bold'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonItalic.click(funcs.italic).mouseover({hint:'italic'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonUnderline.click(funcs.underline).mouseover({hint:'underline'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.align){
-                lbuttonAlignLeft.click(funcs.alignLeft);
-                lbuttonAlignCenter.click(funcs.alignCenter);
-                lbuttonAlignRight.click(funcs.alignRight);
+                lbuttonAlignLeft.click(funcs.alignLeft).mouseover({hint:'left'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonAlignCenter.click(funcs.alignCenter).mouseover({hint:'center'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonAlignRight.click(funcs.alignRight).mouseover({hint:'right'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.font){
                 lfontPicker.find('.lEditor-button').click(funcs.changeFontFace);
                 lfontSizePicker.find('.lEditor-button').click(funcs.changeFontSize);
             }
             if (btnExist.color){
-                lbuttonColor.click(funcs.changeColor);
-                lbuttonBgColor.click(funcs.changeBgColor);
+                lbuttonColor.click(funcs.changeColor).mouseover({hint:'foreground color'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonBgColor.click(funcs.changeBgColor).mouseover({hint:'background color'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.list){
-                lbuttonOl.click(funcs.orderList);
-                lbuttonUl.click(funcs.unorderList);
+                lbuttonOl.click(funcs.orderList).mouseover({hint:'order list'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonUl.click(funcs.unorderList).mouseover({hint:'unorder list'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.link){
-                lbuttonLink.click(funcs.insertLink);
-                lbuttonDelLink.click(funcs.delLink);
+                lbuttonLink.click(funcs.insertLink).mouseover({hint:'add link'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonDelLink.click(funcs.delLink).mouseover({hint:'remove link'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.insert){
-                lbuttonImage.click(funcs.image);
-                lbuttonCode.click(funcs.insertCode);
+                lbuttonImage.click(funcs.image).mouseover({hint:'insert image'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonCode.click(funcs.insertCode).mouseover({hint:'insert code'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.remove){
-                lbuttonRemoveFormat.click(funcs.removeFormat);
-                lbuttonCLear.click(funcs.clear);
+                lbuttonRemoveFormat.click(funcs.removeFormat).mouseover({hint:'remove format'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonCLear.click(funcs.clear).mouseover({hint:'clear all'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (initExitFullScreen){
-                lbuttonFullScreen.click(funcs.exitFullScreen);
+                lbuttonFullScreen.click(funcs.exitFullScreen).mouseover({hint:'exit'}, funcs.hint).mouseleave(funcs.hideHint);
             } else if (initFullScreen){
-                lbuttonFullScreen.click(funcs.fullScreen);
+                lbuttonFullScreen.click(funcs.fullScreen).mouseover({hint:'full screen'}, funcs.hint).mouseleave(funcs.hideHint);
             }
         }
     });
