@@ -147,7 +147,8 @@
                 initCallback = options.callback || undefined,
                 initButtonSize = options.button_size || undefined,
                 initFrameBgColor = options.textarea_bg_color || undefined,
-                initToolBarBgColor = options.toolbar_bg_color || undefined;
+                initToolBarBgColor = options.toolbar_bg_color || undefined,
+                initToolBarColor = options.toolbar_color || undefined;
             
             /* build container */
             var lcontainer;
@@ -296,8 +297,14 @@
             if (initFrameBgColor){
                 lcontainer.find('.lEditor-frame').css('background-color', initFrameBgColor);
             }
+            if (initColor){
+                lframeDocument.find('body').css('color', initColor);
+            }
             if (initToolBarBgColor){
                 lcontainer.find('.lEditor-toolbar').css('background-color', initToolBarBgColor);
+            }
+            if (initToolBarColor){
+                lcontainer.find('.lEditor-toolbar').css('color', initToolBarColor);
             }
             
             /* set listeners */
@@ -307,14 +314,17 @@
             
             /* - function collection */
             var funcs = {
-                keyPress: function(e){
+                keyDown: function(e){
                     /* for enter key, insert a br instead a div */
                     if (e.keyCode == 13){
                         var sel, range;
-                        if (frameWindow.getSelection) {
-                            sel = frameWindow.getSelection();
-                            if (sel.getRangeAt && sel.rangeCount){
-                                range = sel.getRangeAt(0);
+                        sel = frameWindow.getSelection();
+                        if (sel.getRangeAt && sel.rangeCount){
+                            range = sel.getRangeAt(0);
+                            // the current node name 
+                            var snodeName = range.startContainer.parentElement.nodeName.toLowerCase();
+                            // only insert <br> when in body or pre
+                            if (snodeName == 'body' || snodeName == 'pre') {
                                 range.deleteContents();
                                 var br = frameDocument.createElement("br");
                                 range.insertNode(br);
@@ -322,16 +332,23 @@
                                 range.setEndAfter(br);
                                 sel.removeAllRanges();
                                 sel.addRange(range);
+                                e.preventDefault();
                             }
                         }
-                        e.preventDefault();
                     }
                     /* for del key, delete the pre */
                     if (e.keyCode == 8 || e.keyCode == 46){
                         var sel, range;
-                        if (frameWindow.getSelection) {
-                            sel = frameWindow.getSelection();
-                            console.log(sel);
+                        sel = frameWindow.getSelection();
+                        if (sel.getRangeAt && sel.rangeCount){
+                            range = sel.getRangeAt(0);
+                            var snode = range.startContainer;
+                            var snodeName = range.startContainer.nodeName.toLowerCase();
+                            // the current node name is pre, and it's empty
+                            if (range.collapsed && snodeName == 'pre' && snode.innerHTML == '<br>'){
+                                snode.parentNode.removeChild(snode);
+                                e.preventDefault();
+                            }
                         }
                     }
                 },
@@ -597,6 +614,15 @@
 //                        sel.removeAllRanges();
 //                        sel.addRange(selectedText);
 //                    }
+                    if (sel.getRangeAt && sel.rangeCount){
+                        range = sel.getRangeAt(0);
+                        var snodeName = range.startContainer.nodeName.toLowerCase();
+                        var sparentNodeName = range.startContainer.parentNode.nodeName.toLowerCase();
+                        // if in pre
+                        if (snodeName == 'pre' || sparentNodeName == 'pre'){
+                            return;
+                        }
+                    }
                     sel += '<br>';
                     var codeHtml = '<pre>' + sel + '</pre>';
                     utils.insertHTML(frameWindow, frameDocument, codeHtml);
@@ -644,7 +670,7 @@
             
             /* - text area */
             lframeWindow.click(funcs.moved)
-                .keypress(funcs.keyPress)
+                .keydown(funcs.keyDown)
                 .keyup(funcs.moved)
                 .blur(funcs.saveText);
             lframeDocument.find('body').keyup(funcs.addBr);
