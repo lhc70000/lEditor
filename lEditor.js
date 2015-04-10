@@ -271,6 +271,7 @@
                                 '    <style>'+
                                 '    body{font-family:'+fonts[initFont]+'}'+
                                 '    pre{'+
+                                '    font-family: "consolas", "courier new", monospace;'+
                                 '    background-color: #eee;'+
                                 '    padding: 10px;'+
                                 '    border-radius: 4px;'+
@@ -323,7 +324,7 @@
                         if (sel.getRangeAt && sel.rangeCount){
                             range = sel.getRangeAt(0);
                             // the current node name 
-                            var snodeName = range.startContainer.parentElement.nodeName.toLowerCase();
+                            var snodeName = range.startContainer.parentNode.nodeName.toLowerCase();
                             // only insert <br> when in body or pre
                             if (snodeName == 'body' || snodeName == 'pre') {
                                 range.deleteContents();
@@ -643,6 +644,7 @@
                 exitFullScreen: function(){
                     initFatherDocument.body.innerHTML = HTMLCode;
                     $('body').removeClass('fullscreen-mode');
+                    $('body').find('.lEditor-hint-div').remove();
                     $('.lEditor-full-div').fadeOut(300, function(){
                         $(this).remove();
                     });

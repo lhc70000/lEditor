@@ -42,12 +42,12 @@ nav {
 .nav-item {
     display: inline-block;
     width: 18%;
-    height: 28px;
+    height: 30px;
     transition: all 0.2s;
 }
 
 .nav-item:hover {
-    border-bottom: 4px solid #179dff;
+    border-bottom: 2px solid #179dff;
 }
 
 .nav-item a {
@@ -57,7 +57,10 @@ nav {
     font-size: 20px;
 }
 
-.nav-item:hover a {color: #179dff;}
+.nav-item:hover a {
+    font-family: 'Open Sans';
+    color: #179dff;
+}
 
 .anchor {
     position: relative;
@@ -92,6 +95,7 @@ p {font-size: 20px;}
 .contents {text-align: left;margin: 0 auto;}
 
 code{
+    font-family: 'consolas', 'courier new', monospace;
     font-size: 20px;
     background-color: rgba(255,255,255,0.5);
     border-radius: 4px;
