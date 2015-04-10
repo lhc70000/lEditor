@@ -197,7 +197,10 @@
             
             /* - full screen button */
             if (opFullScreen){
-                lbuttonFullScreen = builders.button('expand');
+                if (opExitFullScreen)
+                    lbuttonFullScreen = builders.button('compress');
+                else
+                    lbuttonFullScreen = builders.button('expand');
                 // its position should adjust based on whether tab is on
                 if (opTab == 'on'){
                     lbuttonFullScreen.css({
@@ -314,6 +317,7 @@
             } else {
                 ltoobar.append(ltabpageStart);
             }
+            
             lcontainer.append(ltoobar);
             
             /* build iframe */
@@ -382,6 +386,11 @@
             }
             if (opToolBarColor){
                 lcontainer.find('.lEditor-toolbar').css('color', opToolBarColor);
+            }
+            // buttons align center in full screen mode
+            if (opExitFullScreen){
+                ltoobar.css('text-align', 'center');
+                lframeDocument.find('body').css('margin', '20px 20%');
             }
             
             /* set listeners */
@@ -638,9 +647,11 @@
                             sel.removeAllRanges();
                             sel.addRange(selectedText);
                         }
-                        if (!(url.startsWith('http://') || url.startsWith('https://')))
-                            url = 'http://' + url;
-                        frameDocument.execCommand('createLink', false, url);
+                        if (url){
+                            if (!(url.startsWith('http://') || url.startsWith('https://')))
+                                url = 'http://' + url;
+                            frameDocument.execCommand('createLink', false, url);
+                        }
                         linkDiv.slideUp(200, function(){
                             $(this).remove();
                         });
@@ -666,9 +677,11 @@
 //                            sel.removeAllRanges();
 //                            sel.addRange(selectedText);
 //                        }
-                        if (!(url.startsWith('http://') || url.startsWith('https://')))
-                            url = 'http://' + url;
-                        frameDocument.execCommand('insertImage', false, url);
+                        if (url){
+                            if (!(url.startsWith('http://') || url.startsWith('https://')))
+                                url = 'http://' + url;
+                            frameDocument.execCommand('insertImage', false, url);
+                        }
                         linkDiv.slideUp(200, function(){
                             $(this).remove();
                         });
@@ -727,6 +740,7 @@
                         height: size.height + 'px',
                         textarea_bg_color: '#f0efd6',
                         toolbar_bg_color: '#dedece',
+                        about: 'on',
                         text: HTMLCode,
                         father_document: frameDocument
                     });
