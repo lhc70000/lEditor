@@ -23,7 +23,7 @@ body.fullscreen-mode {
     color: #444; /* button color */
     background-color: #ddd;
     border-bottom: 1px solid #aaa;
-    padding: 10px 5px;
+    padding: 0 5px;
     overflow-x: auto;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
@@ -31,9 +31,10 @@ body.fullscreen-mode {
 
 .lEditor-button-group {
     display: inline-block;
-    margin: 0 2px;
+    margin: 5px 2px;
     border-right: 1px solid #aaa;
     padding-right: 4px;
+    vertical-align: middle;
 }
 
 .lEditor-button-group:last-child {
@@ -203,4 +204,43 @@ body.fullscreen-mode {
     opacity: 0.8;
     padding: 0 2px;
     font-size: 12px;
+}
+
+.lEditor-tab-container {
+    margin: 4px 30px 2px 5px;
+    border-bottom: 1px solid #aaa;
+}
+
+.lEditor-tab {
+    color: #aaa;
+    display: inline-block;
+    width: 80px;
+    padding: 4px 0;
+    margin-bottom: -1px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.lEditor-tab:hover {
+    font-weight: bold;
+}
+
+.lEditor-tab-active {
+    color: #444;
+    cursor: default;
+    font-weight: bold;
+/*
+    border-top: 1px solid #aaa;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+*/
+    border-bottom: 2px solid #444;
+}
+
+.lEditor-tab-page {
+    margin-right: 30px;
 }
