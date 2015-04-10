@@ -10,8 +10,10 @@
             $('#container').lEditor({
                 height:'300px',
                 full_screen: true,
+                about: 'on'
             });
             $('#demo1').lEditor({
+                tab: 'off',
                 height: '150px',
                 toolbar: ['undo', 'style'],
                 font: 'Georgia',
@@ -78,12 +80,15 @@
             <code>align</code>  ( left / center / right ) <br>
             <code>list</code>  ( ul / ol ) <br>
             <code>link</code>  ( add / remove )<br>
-            <code>insert</code>  ( img / code )<br>
+            <code>media</code>  ( img )<br>
+            <code>textblock</code> ( hr / quote / code )<br>
             <code>remove</code> ( clear format / clear all )
         </div>
         </dd>
         <dt>button_size</dt> <dd>a css size string for the button size, default is <code>14px</code></dd><br>
-        <dt>full_screen</dt> <dd>true/ false, enable full screen mode. A full screen button will show in the toolbar. Default is false.</dd>
+        <dt>full_screen</dt> <dd>true/ false, enable full screen mode. A full screen button will show in the toolbar. Default is false.</dd><br>
+        <dt>tab</dt> <dd>'off' / 'on', button groups will be put into different tab pages automatically. Useful when there are too much buttons. Default is <code>'on'</code></dd><br>
+        <dt>about</dt> <dd>'off' / 'on', add an "about" tab showing about information. Default is <code>'off'</code></dd>
         
         <h3>getting the text</h3>
         <dt>callback</dt> <dd>a function called when text changes. the function accepts a parameter which is the html code of the text.</dd>
@@ -99,6 +104,7 @@
     <div id="right">
         <code style="display:block">
             $('#demo1').lEditor({<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;tab: 'off',<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;height: '150px',<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;toolbar: ['undo', 'style'],<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;font: 'Georgia',<br>

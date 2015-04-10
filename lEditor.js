@@ -1,10 +1,12 @@
 /**
  * lEditor
- * v 0.4.5
+ * v 0.5.0
  * by lhc (lhc199652@gmail.com)
  */
 
 (function(window, document, undefined){
+    
+    var version = '0.5.0';
     
     /* presets for fonts */
     var fonts = {
@@ -63,9 +65,9 @@
             return lbutton;
         },
         // builder for font picker
-        fontPicker: function(initFont){
+        fontPicker: function(opFont){
             var fontPickerContainer = $('<div class="lEditor-font-container"></div>'),
-                fontPickerText = $('<div class="lEditor-font-text" style="width: 80px;">'+initFont+'</div>'),
+                fontPickerText = $('<div class="lEditor-font-text" style="width: 80px;">'+opFont+'</div>'),
                 fontPickerButton = $('<div class="lEditor-button"></div>'),
                 fontPickerIcon = $('<i class="fa fa-angle-down"></i>');
             fontPickerButton.append(fontPickerIcon);
@@ -73,9 +75,9 @@
             return fontPickerContainer;
         },
         // builder for font size picker
-        fontSizePicker: function(initFontSize){
+        fontSizePicker: function(opFontSize){
             var fontSizePickerContainer = $('<div class="lEditor-font-container"></div>'),
-                fontSizePickerText = $('<div class="lEditor-font-text" style="width: 12px;">' + initFontSize + '</div>'),
+                fontSizePickerText = $('<div class="lEditor-font-text" style="width: 12px;">' + opFontSize + '</div>'),
                 fontSizePickerButton = $('<div class="lEditor-button"></div>'),
                 fontSizePickerIcon = $('<i class="fa fa-angle-down"></i>');
             fontSizePickerButton.append(fontSizePickerIcon);
@@ -89,6 +91,11 @@
             lbutton.css('color', color);
             lbutton.append(licon);
             return lbutton;
+        },
+        // builder for tabs
+        tab: function(title, active){
+            var ltag = $('<div class="lEditor-tab '+active+'">'+title+'</div>');
+            return ltag;
         }
     };
     
@@ -134,116 +141,178 @@
         lEditor: function(options){
             /* options handling*/
             options = options || [];
-            var initHeight = options.height || '200px',
-                initFont = options.font || 'Arial',
-                initFontSize = options.font_size || 4,
-                initColor = options.color || '#000',
-                initBgColor = options.bg_color || '#fff',
-                initToolBar = options.toolbar || ['undo', 'font', 'style', 'color', 'align', 'list', 'link', 'insert', 'remove'],
-                initFullScreen = options.full_screen || false,
-                initExitFullScreen = options.exit_full_screen || false, // private
-                initFatherDocument = options.father_document || undefined, // private
-                initText = options.text || '',
-                initCallback = options.callback || undefined,
-                initButtonSize = options.button_size || undefined,
-                initFrameBgColor = options.textarea_bg_color || undefined,
-                initToolBarBgColor = options.toolbar_bg_color || undefined,
-                initToolBarColor = options.toolbar_color || undefined;
+            var opHeight = options.height || '200px',
+                opFont = options.font || 'Arial',
+                opFontSize = options.font_size || 4,
+                opColor = options.color || '#000',
+                opBgColor = options.bg_color || '#fff',
+                opToolBar = options.toolbar || ['undo', 'font', 'style', 'color', 'align', 'list', 'link', 'media', 'textblock', 'remove'],
+                opFullScreen = options.full_screen || false,
+                opExitFullScreen = options.exit_full_screen || false, // private
+                opFatherDocument = options.father_document || undefined, // private
+                opText = options.text || '',
+                opCallback = options.callback || undefined,
+                opButtonSize = options.button_size || undefined,
+                opFrameBgColor = options.textarea_bg_color || undefined,
+                opToolBarBgColor = options.toolbar_bg_color || undefined,
+                opToolBarColor = options.toolbar_color || undefined,
+                opTab = options.tab || 'on',
+                opAbout = options.about || 'off';
             
             /* build container */
             var lcontainer;
-            lcontainer = $('<div class="lEditor-container" width="100%" style="height:' + initHeight + '"></div>');
+            lcontainer = $('<div class="lEditor-container" width="100%" style="height:' + opHeight + '"></div>');
             this.append(lcontainer);
             
             /* build toolbar */
-            var ltoobar,
+            var ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>'),
                 lbuttonFullScreen,
                 lbuttonUndo, lbuttonRepeat,
                 lfontPicker, lfontSizePicker,
-                lbuttonBold, lbuttonItalic, lbuttonUnderline,
+                lbuttonBold, lbuttonItalic, lbuttonUnderline, lbuttonStrike,
                 lbuttonColor, lbuttonBgColor,
                 lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight,
                 lbuttonOl, lbuttonUl,
                 lbuttonLink, lbuttonDelLink,
-                lbuttonImage, lbuttonCode,
+                lbuttonImage, 
+                lbuttonHr, lbuttonQuote, lbuttonCode,
                 lbuttonRemoveFormat, lbuttonCLear,
+                lbuttonGithub, lbuttonMail,
+                ltabContainer,
+                ltabStart, ltabInsert, ltabAbout,
+                ltabpageStart, ltabpageInsert, ltabpageAbout,
                 // whether button group exist
                 btnExist = {
-                    'undo': false,
-                    'font': false,
-                    'style': false,
-                    'color': false,
-                    'align': false,
-                    'list': false,
-                    'link':false,
-                    'insert': false,
-                    'remove': false
+                    undo: false,
+                    font: false,
+                    style: false,
+                    color: false,
+                    align: false,
+                    list: false,
+                    link:false,
+                    media: false,
+                    textblock: false,
+                    remove: false
                 };
-            ltoobar = $('<div class="lEditor-toolbar" width="100%"></div>');
             
-            /* - */
-            if (initFullScreen){
+            /* - full screen button */
+            if (opFullScreen){
                 lbuttonFullScreen = builders.button('expand');
-                lbuttonFullScreen.css('float', 'right');
+                // its position should adjust based on whether tab is on
+                if (opTab == 'on'){
+                    lbuttonFullScreen.css({
+                        'float': 'right',
+                        'margin-top': '20px'
+                    });
+                } else {
+                    lbuttonFullScreen.css('float', 'right');
+                }
                 ltoobar.append(lbuttonFullScreen);
             }
-            for (var item in initToolBar) {
-                if (initToolBar[item] == 'undo'){
+            
+            /* - tab */
+            if (opTab == 'on'){
+                ltabContainer = $('<div class="lEditor-tab-container"></div>');
+                ltabStart = builders.tab('Start', 'lEditor-tab-active');
+                ltabInsert = builders.tab('Insert', '');
+                ltabpageStart = $('<div class="lEditor-tab-page"></div>');
+                ltabpageInsert = $('<div class="lEditor-tab-page"></div>');
+                ltabpageInsert.hide();
+                ltabContainer.append(ltabStart).append(ltabInsert);
+                // if show about tab
+                if (opAbout == 'on'){
+                    ltabAbout = builders.tab('About', '');
+                    ltabpageAbout = $('<div class="lEditor-tab-page"></div');
+                    var versionText = $('<div class="lEditor-button-group">&nbsp;&nbsp;lEditor v'+version+'&nbsp;&nbsp;</div>');
+                    versionText.css({
+                        'color': '#999',
+                        'font-size': '14px'
+                    });
+                    lbuttonGithub = builders.button('github');
+                    lbuttonMail = builders.button('envelope');
+                    ltabpageAbout.append(versionText);
+                    ltabpageAbout.append(builders.buttonGroup([lbuttonGithub, lbuttonMail]));
+                    ltabpageAbout.hide();
+                    ltabContainer.append(ltabAbout);
+                }
+                ltoobar.append(ltabContainer);
+            } else {
+                ltabpageInsert = ltabpageStart = $('<div class="lEditor-tab-page"></div>')
+            }
+            
+            /* - toolbar buttons */
+            for (var item in opToolBar) {
+                if (opToolBar[item] == 'undo'){
                     //---undo-redo
                     btnExist.undo = true;
                     lbuttonUndo = builders.button('undo');
                     lbuttonRepeat = builders.button('repeat');
-                    ltoobar.append(builders.buttonGroup([lbuttonUndo, lbuttonRepeat]));
-                } else if (initToolBar[item] == 'font'){
+                    ltabpageStart.append(builders.buttonGroup([lbuttonUndo, lbuttonRepeat]));
+                } else if (opToolBar[item] == 'font'){
                     //---font
                     btnExist.font = true;
-                    lfontPicker = builders.fontPicker(initFont);
-                    lfontSizePicker = builders.fontSizePicker(initFontSize);
-                    ltoobar.append(builders.buttonGroup([lfontPicker, lfontSizePicker]));
-                } else if (initToolBar[item] == 'style'){
+                    lfontPicker = builders.fontPicker(opFont);
+                    lfontSizePicker = builders.fontSizePicker(opFontSize);
+                    ltabpageStart.append(builders.buttonGroup([lfontPicker, lfontSizePicker]));
+                } else if (opToolBar[item] == 'style'){
                     //---style
                     btnExist.style = true;
                     lbuttonBold = builders.button('bold');
                     lbuttonItalic = builders.button('italic');
                     lbuttonUnderline = builders.button('underline');
-                    ltoobar.append(builders.buttonGroup([lbuttonBold, lbuttonItalic, lbuttonUnderline]));
-                } else if (initToolBar[item] == 'color'){
+                    lbuttonStrike = builders.button('strikethrough');
+                    ltabpageStart.append(builders.buttonGroup([lbuttonBold, lbuttonItalic, lbuttonUnderline, lbuttonStrike]));
+                } else if (opToolBar[item] == 'color'){
                     //---color
                     btnExist.color = true;
-                    lbuttonColor = builders.colorPicker('pencil', 'color', initColor);
-                    lbuttonBgColor = builders.colorPicker('paint-brush', 'background-color', initBgColor);
-                    ltoobar.append(builders.buttonGroup([lbuttonColor, lbuttonBgColor]));
-                } else if (initToolBar[item] == 'align'){
+                    lbuttonColor = builders.colorPicker('pencil', 'color', opColor);
+                    lbuttonBgColor = builders.colorPicker('paint-brush', 'background-color', opBgColor);
+                    ltabpageStart.append(builders.buttonGroup([lbuttonColor, lbuttonBgColor]));
+                } else if (opToolBar[item] == 'align'){
                     //---align
                     btnExist.align = true;
                     lbuttonAlignLeft = builders.button('align-left');
                     lbuttonAlignCenter = builders.button('align-center');
                     lbuttonAlignRight = builders.button('align-right');
-                    ltoobar.append(builders.buttonGroup([lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight]));
-                } else if (initToolBar[item] == 'list'){
+                    ltabpageStart.append(builders.buttonGroup([lbuttonAlignLeft, lbuttonAlignCenter, lbuttonAlignRight]));
+                } else if (opToolBar[item] == 'list'){
                     //---list
                     btnExist.list = true;
                     lbuttonUl = builders.button('list-ul');
                     lbuttonOl = builders.button('list-ol');
-                    ltoobar.append(builders.buttonGroup([lbuttonUl, lbuttonOl]));
-                } else if (initToolBar[item] == 'link'){
+                    ltabpageInsert.append(builders.buttonGroup([lbuttonUl, lbuttonOl]));
+                } else if (opToolBar[item] == 'link'){
                     //---link
                     btnExist.link = true;
                     lbuttonLink = builders.button('link');
                     lbuttonDelLink = builders.button('chain-broken');
-                    ltoobar.append(builders.buttonGroup([lbuttonLink, lbuttonDelLink]));
-                } else if (initToolBar[item] == 'insert'){
+                    ltabpageInsert.append(builders.buttonGroup([lbuttonLink, lbuttonDelLink]));
+                } else if (opToolBar[item] == 'media'){
                     //---insert
-                    btnExist.insert = true;
+                    btnExist.media = true;
                     lbuttonImage = builders.button('image');
+                    ltabpageInsert.append(builders.buttonGroup([lbuttonImage]));
+                } else if (opToolBar[item] == 'textblock'){
+                    //---insert
+                    btnExist.textblock = true;
+                    lbuttonHr = builders.button('minus');
+                    lbuttonQuote = builders.button('quote-left');
                     lbuttonCode = builders.button('code');
-                    ltoobar.append(builders.buttonGroup([lbuttonImage, lbuttonCode]));
-                } else if (initToolBar[item] == 'remove'){
+                    ltabpageInsert.append(builders.buttonGroup([lbuttonHr, lbuttonQuote, lbuttonCode]));
+                } else if (opToolBar[item] == 'remove'){
                     btnExist.remove = true;
                     lbuttonRemoveFormat = builders.button('eraser');
                     lbuttonCLear = builders.button('trash');
-                    ltoobar.append(builders.buttonGroup([lbuttonRemoveFormat, lbuttonCLear]));
+                    ltabpageStart.append(builders.buttonGroup([lbuttonRemoveFormat, lbuttonCLear]));
                 }
+            }
+            
+            if (opTab == 'on'){
+                ltoobar.append(ltabpageStart).append(ltabpageInsert);
+                if (opAbout == 'on')
+                    ltoobar.append(ltabpageAbout);
+            } else {
+                ltoobar.append(ltabpageStart);
             }
             lcontainer.append(ltoobar);
             
@@ -266,20 +335,24 @@
             frameDocument.write('<!DOCTYPE html>'+
                                 '<html lang="en">'+
                                 '<head>'+
-                                '    <meta charset="UTF-8">'+
-                                '    <title>lEditor</title>'+
-                                '    <style>'+
-                                '    body{font-family:'+fonts[initFont]+'}'+
-                                '    pre{'+
-                                '    font-family: "consolas", "courier new", monospace;'+
-                                '    background-color: #eee;'+
-                                '    padding: 10px;'+
-                                '    border-radius: 4px;'+
-                                '    }</style>'+
+                                '   <meta charset="UTF-8">'+
+                                '   <title>lEditor</title>'+
+                                '   <style>'+
+                                '   body{font-family:'+fonts[opFont]+'}'+
+                                '   pre{'+
+                                '       font-family: "consolas", "courier new", monospace;'+
+                                '       background-color: #eee;'+
+                                '       padding: 10px;'+
+                                '       border-radius: 4px;'+
+                                '   }'+
+                                '   blockquote{'+
+                                '       padding: 5px 10px;'+
+                                '       border-left: 2px solid #84def4;'+
+                                '   }</style>'+
                                 '</head>'+
                                 '<body>'+
-                                initText+
-                                '</body>'+
+                                opText+
+                                '<br></body>'+
                                 '</html>');
             frameDocument.close();
             frameDocument.designMode = "on";
@@ -287,32 +360,34 @@
                 if (frameDocument.designMode.toLowerCase() === 'off') {
                     frameDocument.designMode = 'on';
                 }
-                frameDocument.execCommand('fontSize', false, initFontSize);
-                frameDocument.execCommand('fontName', false, fonts[initFont]);
+                frameDocument.execCommand('fontSize', false, opFontSize);
+                frameDocument.execCommand('fontName', false, fonts[opFont]);
             };
             
             /* set appearance */
-            if (initButtonSize){
-                lcontainer.find('.lEditor-button, .lEditor-font-text').css('font-size', initButtonSize);
+            if (opButtonSize){
+                lcontainer.find('.lEditor-button, .lEditor-font-text').css('font-size', opButtonSize);
             }
-            if (initFrameBgColor){
-                lcontainer.find('.lEditor-frame').css('background-color', initFrameBgColor);
+            if (opFrameBgColor){
+                lcontainer.find('.lEditor-frame').css('background-color', opFrameBgColor);
             }
-            if (initColor){
-                lframeDocument.find('body').css('color', initColor);
+            if (opColor){
+                lframeDocument.find('body').css('color', opColor);
             }
-            if (initToolBarBgColor){
-                lcontainer.find('.lEditor-toolbar').css('background-color', initToolBarBgColor);
+            if (opToolBarBgColor){
+                lcontainer.find('.lEditor-toolbar').css('background-color', opToolBarBgColor);
             }
-            if (initToolBarColor){
-                lcontainer.find('.lEditor-toolbar').css('color', initToolBarColor);
+            if (opToolBarColor){
+                lcontainer.find('.lEditor-toolbar').css('color', opToolBarColor);
             }
             
             /* set listeners */
             var selectedText, 
                 // the innerhtml code
-                HTMLCode = initText,
-                hintDiv = null;
+                HTMLCode = opText,
+                hintDiv = null,
+                activeTab = ltabStart,
+                activeTabPage = ltabpageStart;
             
             /* - function collection */
             var funcs = {
@@ -325,8 +400,8 @@
                             range = sel.getRangeAt(0);
                             // the current node name 
                             var snodeName = range.startContainer.parentNode.nodeName.toLowerCase();
-                            // only insert <br> when in body or pre
-                            if (snodeName == 'body' || snodeName == 'pre') {
+                            // only insert <br> when in body or blocks
+                            if (snodeName == 'body' || snodeName == 'pre' || snodeName == 'blockquote') {
                                 range.deleteContents();
                                 var br = frameDocument.createElement("br");
                                 range.insertNode(br);
@@ -347,7 +422,9 @@
                             var snode = range.startContainer;
                             var snodeName = range.startContainer.nodeName.toLowerCase();
                             // the current node name is pre, and it's empty
-                            if (range.collapsed && snodeName == 'pre' && snode.innerHTML == '<br>'){
+                            if (range.collapsed && 
+                                (snodeName == 'pre' || snodeName == 'blockquote') && 
+                                snode.innerHTML == '<br>'){
                                 snode.parentNode.removeChild(snode);
                                 e.preventDefault();
                             }
@@ -355,7 +432,7 @@
                     }
                 },
                 addBr: function() {
-                    lframeDocument.find('body, pre').each(function(){
+                    lframeDocument.find('body, pre, blockquote').each(function(){
                         if (!this.lastChild || this.lastChild.nodeName.toLowerCase() != "br") {
                             this.appendChild(document.createElement("br"));
                         }
@@ -411,8 +488,8 @@
                 },
                 saveText: function(){
                     HTMLCode = frameDocument.body.innerHTML;
-                    if (initCallback){
-                        initCallback.call(this, HTMLCode);
+                    if (opCallback){
+                        opCallback.call(this, HTMLCode);
                     }
                 },
                 undo: function(){
@@ -441,6 +518,13 @@
                         lbuttonUnderline.addClass('lEditor-button-hilighted');
                     else
                         lbuttonUnderline.removeClass('lEditor-button-hilighted');
+                },
+                strike: function(){
+                    frameDocument.execCommand('strikeThrough');
+                    if (frameDocument.queryCommandState('strikeThrough'))
+                        lbuttonStrike.addClass('lEditor-button-hilighted');
+                    else
+                        lbuttonStrike.removeClass('lEditor-button-hilighted');
                 },
                 alignLeft: function(){
                     frameDocument.execCommand('JustifyLeft');
@@ -534,6 +618,9 @@
                 unorderList: function(){
                     frameDocument.execCommand('insertUnorderedList');   
                 },
+                hr: function(){
+                    frameDocument.execCommand('insertHorizontalRule'); 
+                },
                 insertLink: function(){
                     var linkDiv = $('<div class="lEditor-link-div"></div>'),
                         linkUrl = $('<input type="text" class="lEditor-input-text"></div>'),
@@ -589,7 +676,7 @@
                     $('body').append(linkDiv);
                     linkDiv.slideDown(200);
                 },
-                insertCode: function(){
+                insertBlock: function(e){
                     var sel = frameDocument.getSelection();
                     // for opera and IE
 //                    if (!sel || sel.anchorOffset === 0) {
@@ -601,12 +688,13 @@
                         var snodeName = range.startContainer.nodeName.toLowerCase();
                         var sparentNodeName = range.startContainer.parentNode.nodeName.toLowerCase();
                         // if in pre
-                        if (snodeName == 'pre' || sparentNodeName == 'pre'){
+                        if (snodeName == e.data.type || sparentNodeName == e.data.type){
                             return;
                         }
                     }
                     sel += '<br>';
-                    var codeHtml = '<pre>' + sel + '</pre>';
+                    var codeHtml = '<'+e.data.type+'>' + sel + '</'+e.data.type+'>';
+                    console.log(codeHtml);
                     utils.insertHTML(frameWindow, frameDocument, codeHtml);
                 },
                 removeFormat: function(){
@@ -642,7 +730,7 @@
                     fullScreenDiv.fadeIn(300);
                 },
                 exitFullScreen: function(){
-                    initFatherDocument.body.innerHTML = HTMLCode;
+                    opFatherDocument.body.innerHTML = HTMLCode;
                     $('body').removeClass('fullscreen-mode');
                     $('body').find('.lEditor-hint-div').remove();
                     $('.lEditor-full-div').fadeOut(300, function(){
@@ -675,6 +763,20 @@
                     });
                     hintDiv = null;
                 },
+                switchTab: function(e){
+                    var target = e.data.target;
+                    if (target == activeTabPage)
+                        return;
+                    activeTab.removeClass('lEditor-tab-active');
+                    activeTabPage.hide();
+                    $(this).addClass('lEditor-tab-active');
+                    target.show();
+                    activeTab = $(this);
+                    activeTabPage = target;
+                },
+                openLink: function(e){
+                    window.open(e.data.link, '_blank');
+                }
             };
             
             /* - text area */
@@ -684,6 +786,15 @@
                 .blur(funcs.saveText);
             lframeDocument.find('body').keyup(funcs.addBr);
             
+            /* - tabs */
+            if (opTab == 'on'){
+                ltabStart.click({target: ltabpageStart}, funcs.switchTab);
+                ltabInsert.click({target: ltabpageInsert}, funcs.switchTab);
+                if (opAbout == 'on'){
+                    ltabAbout.click({target: ltabpageAbout}, funcs.switchTab);
+                }
+            }
+        
             /* - buttons */
             ltoobar.click(funcs.saveText);
             
@@ -695,6 +806,7 @@
                 lbuttonBold.click(funcs.bold).mouseover({hint:'bold'}, funcs.hint).mouseleave(funcs.hideHint);
                 lbuttonItalic.click(funcs.italic).mouseover({hint:'italic'}, funcs.hint).mouseleave(funcs.hideHint);
                 lbuttonUnderline.click(funcs.underline).mouseover({hint:'underline'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonStrike.click(funcs.strike).mouseover({hint:'strike through'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.align){
                 lbuttonAlignLeft.click(funcs.alignLeft).mouseover({hint:'align left'}, funcs.hint).mouseleave(funcs.hideHint);
@@ -719,18 +831,30 @@
                 lbuttonLink.click(funcs.insertLink).mouseover({hint:'add link'}, funcs.hint).mouseleave(funcs.hideHint);
                 lbuttonDelLink.click(funcs.delLink).mouseover({hint:'remove link'}, funcs.hint).mouseleave(funcs.hideHint);
             }
-            if (btnExist.insert){
-                lbuttonImage.click(funcs.image).mouseover({hint:'insert image'}, funcs.hint).mouseleave(funcs.hideHint);
-                lbuttonCode.click(funcs.insertCode).mouseover({hint:'insert code'}, funcs.hint).mouseleave(funcs.hideHint);
+            if (btnExist.media){
+                lbuttonImage.click(funcs.image).mouseover({hint:'image'}, funcs.hint).mouseleave(funcs.hideHint);
+            }
+            if (btnExist.textblock){
+                lbuttonHr.click(funcs.hr).mouseover({hint:'horizontal rule'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonQuote.click({type:'blockquote'}, funcs.insertBlock)
+                    .mouseover({hint:'quote'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonCode.click({type:'pre'}, funcs.insertBlock)
+                    .mouseover({hint:'code'}, funcs.hint).mouseleave(funcs.hideHint);
             }
             if (btnExist.remove){
                 lbuttonRemoveFormat.click(funcs.removeFormat).mouseover({hint:'remove format'}, funcs.hint).mouseleave(funcs.hideHint);
                 lbuttonCLear.click(funcs.clear).mouseover({hint:'clear all'}, funcs.hint).mouseleave(funcs.hideHint);
             }
-            if (initExitFullScreen){
+            if (opExitFullScreen){
                 lbuttonFullScreen.click(funcs.exitFullScreen).mouseover({hint:'exit'}, funcs.hint).mouseleave(funcs.hideHint);
-            } else if (initFullScreen){
+            } else if (opFullScreen){
                 lbuttonFullScreen.click(funcs.fullScreen).mouseover({hint:'full screen'}, funcs.hint).mouseleave(funcs.hideHint);
+            }
+            if (opAbout == 'on' && opTab == 'on'){
+                lbuttonGithub.click({link:'//github.com/lhc70000/lEditor'}, funcs.openLink)
+                    .mouseover({hint:'view on github'}, funcs.hint).mouseleave(funcs.hideHint);
+                lbuttonMail.click({link:'mailto:lhc199652@gmail.com'}, funcs.openLink)
+                    .mouseover({hint:'send email'}, funcs.hint).mouseleave(funcs.hideHint);
             }
         }
     });
