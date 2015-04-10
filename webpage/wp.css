@@ -94,7 +94,7 @@ p {font-size: 20px;}
 
 .contents {text-align: left;margin: 0 auto;}
 
-code{
+code, pre{
     font-family: 'consolas', 'courier new', monospace;
     font-size: 20px;
     background-color: rgba(255,255,255,0.5);
@@ -128,31 +128,31 @@ footer {
     background-color: rgba(255,255,255,0.5);
 }
 
+.demo-container {
+    width: 700px;
+    margin: 0 auto;
+    padding: 10px 0;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 4px;
+}
+
 #demo1 {
-    width: 300px;
+    width: 500px;
     margin:0 auto;
 }
-#demo1_code {
-    width: 300px;
-    height:105px;
+#demo1-code {
+    width: 500px;
+    height:100px;
     margin:20px 0;
     padding:0;
+    margin:0;
     border:none;
 }
 
-#left {
-    width:300px;
-    height: 310px;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-#right {
-    width:410px;
-    height:310px;
-    display: inline-block;
+.demo-code {
+    margin: 0 auto;
+    width:700px;
     text-align: left;
-    vertical-align: middle;
 }
 
 footer a{color:#aaa}
