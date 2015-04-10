@@ -1,2 +1,2 @@
-- IE(奇怪的)支持
+- IE支持:parentElement
 - 悬浮菜单
