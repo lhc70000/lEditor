@@ -15,14 +15,14 @@
             $('#demo1').lEditor({
                 tab: 'off',
                 height: '150px',
-                toolbar: ['undo', 'style'],
+                toolbar: ['undo', 'style', 'link'],
                 font: 'Georgia',
                 textarea_bg_color: '#2e2e2e',
                 toolbar_bg_color: '#525151',
                 toolbar_color: '#4bd7ea',
                 color: '#fff',
                 callback: function(str){
-                    $('#demo1_code').val(str);
+                    $('#demo1-code').val(str);
                 }
             });
         });
@@ -40,6 +40,7 @@
     <h1>lEditor</h1>
     <p id="subtitle">A clean web text editor</p>
     <div id="container"></div>
+    
     <div id="Usage" class="anchor"></div>
     <h2>Usage</h2>
     <div class="contents" style="width:500px;">
@@ -47,9 +48,10 @@
         <p>1. Include <code>lEditor.js</code> and <code>lEditor.css</code></p>
         <p>2. Bind <code>$(a-div).lEditor();</code> to onload event</p>
         <p>3. It's possible to add more options:
-        <code style="display:block">
-        $(a-div).lEditor({ <br>&nbsp;&nbsp;&nbsp;&nbsp;height: '300px', <br>&nbsp;&nbsp;&nbsp;&nbsp;color: '#ff0' <br>});
-        </code></p>
+        <pre>$(a-div).lEditor({
+    height: '300px',
+    color: '#ff0'
+});</pre></p>
     </div>
     <div id="Options" class="anchor"></div>
     <h2>Options</h2>
@@ -96,28 +98,25 @@
     </div>
     <div id="Demo" class="anchor"></div>
     <h2>Demo</h2>
-    <div>
-    <div id="left">
+    <div class="demo-code">
+        <pre>
+$('#demo1').lEditor({
+    tab: 'off',
+    height: '150px',
+    toolbar: ['undo', 'style', 'link'],
+    font: 'Georgia',
+    textarea_bg_color: '#2e2e2e',
+    toolbar_bg_color: '#525151',
+    toolbar_color: '#4bd7ea',
+    color: '#fff',
+    callback: function(str){
+        $('#demo1-code').val(str);
+    }
+});</pre>
+   </div>
+    <div class="demo-container">
         <div id="demo1"></div>
-        <textarea id="demo1_code"></textarea>
-    </div>
-    <div id="right">
-        <code style="display:block">
-            $('#demo1').lEditor({<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;tab: 'off',<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;height: '150px',<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;toolbar: ['undo', 'style'],<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;font: 'Georgia',<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;textarea_bg_color: '#2e2e2e',<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;toolbar_bg_color: '#525151',<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;toolbar_color: '#4bd7ea',<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;color: '#fff',<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;callback: function(str){<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$('#demo1_code').val(str);<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-            });<br>
-        </code>
-    </div>
+        <textarea id="demo1-code"></textarea>
     </div>
     <div id="about" class="anchor"></div>
     <footer>

@@ -1,12 +1,12 @@
 /**
  * lEditor
- * v 0.5.0
+ * v 0.5.1
  * by lhc (lhc199652@gmail.com)
  */
 
 (function(window, document, undefined){
     
-    var version = '0.5.0';
+    var version = '0.5.1';
     
     /* presets for fonts */
     var fonts = {
@@ -338,7 +338,10 @@
                                 '   <meta charset="UTF-8">'+
                                 '   <title>lEditor</title>'+
                                 '   <style>'+
-                                '   body{font-family:'+fonts[opFont]+'}'+
+                                '   body{'+
+                                '       font-family:'+fonts[opFont]+';'+
+                                '       word-wrap: break-word;'+
+                                '   }'+
                                 '   pre{'+
                                 '       font-family: "consolas", "courier new", monospace;'+
                                 '       background-color: #eee;'+
@@ -401,7 +404,7 @@
                             // the current node name 
                             var snodeName = range.startContainer.parentNode.nodeName.toLowerCase();
                             // only insert <br> when in body or blocks
-                            if (snodeName == 'body' || snodeName == 'pre' || snodeName == 'blockquote') {
+                            if (!(snodeName == 'li' || snodeName == 'ul' || snodeName == 'ol')) {
                                 range.deleteContents();
                                 var br = frameDocument.createElement("br");
                                 range.insertNode(br);
@@ -671,10 +674,10 @@
                         });
                     });
                     linkDiv.append($('<h4>Image URL:</h4>')).append(linkUrl).append(linkOKButton).hide();
-                    var pos = lbuttonLink.offset();
-                    linkDiv.offset(pos);
                     $('body').append(linkDiv);
                     linkDiv.slideDown(200);
+                    var pos = lbuttonImage.offset();
+                    linkDiv.offset(pos);
                 },
                 insertBlock: function(e){
                     var sel = frameDocument.getSelection();
