@@ -2,14 +2,14 @@
   font-family: 'Open Sans Light';
   font-style: normal;
   font-weight: 300;
-  src: local('Open Sans Light'), local('OpenSans-Light'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+  src: url(OpenSans-Light.ttf);
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+  src: url(OpenSans-Regular.ttf);
 }
 
 body {
@@ -32,17 +32,18 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
-    height: 30px;
-    padding-top: 3px;
-    background-color: #fff;
+    height: 60px;
+    background-color: rgba(194, 225, 255, 0.85);
     border-bottom: 2px solid #9b9b9b;
     box-shadow: 0 2px 2px #555;
 }
 
 .nav-item {
     display: inline-block;
-    width: 18%;
-    height: 30px;
+    width: 15%;
+    height: 60px;
+    text-transform: uppercase;
+    cursor: pointer;
     transition: all 0.2s;
 }
 
@@ -51,15 +52,22 @@ nav {
 }
 
 .nav-item a {
+    display: block;
+    padding-top: 14px;
     text-decoration: none;
     font-family: 'Open Sans Light';
-    color: #111;
+    color: #fff;
     font-size: 20px;
+    height: 46px;
 }
 
 .nav-item:hover a {
     font-family: 'Open Sans';
     color: #179dff;
+}
+
+#main {
+    margin-top: 80px;
 }
 
 .anchor {
