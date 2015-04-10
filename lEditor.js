@@ -1,12 +1,12 @@
 /**
  * lEditor
- * v 0.5.1
+ * v 0.5.2
  * by lhc (lhc199652@gmail.com)
  */
 
 (function(window, document, undefined){
     
-    var version = '0.5.1';
+    var version = '0.5.2';
     
     /* presets for fonts */
     var fonts = {
