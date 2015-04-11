@@ -1,12 +1,12 @@
 /**
  * lEditor
- * v 0.5.2
+ * v 0.5.3
  * by lhc (lhc199652@gmail.com)
  */
 
 (function(window, document, undefined){
     
-    var version = '0.5.2';
+    var version = '0.5.3';
     
     /* presets for fonts */
     var fonts = {
@@ -453,7 +453,8 @@
                 moved: function(e){
                     funcs.saveText();
                     
-                    keyCodes = [8, 13, 46, 33, 34, 35, 36, 37, 38, 39, 40];
+                    // watch A key because ctrl+A is select all
+                    keyCodes = [8, 13, 46, 33, 34, 35, 36, 37, 38, 39, 40, 65];
                     if (e.type !== 'click' && 
                         !((e.type === 'keyup') && (keyCodes.indexOf(e.keyCode) != -1)))
                         return;
@@ -491,7 +492,22 @@
                             lbuttonAlignRight.removeClass('lEditor-button-hilighted');
                     }
                     
-                    selectedText = frameDocument.getSelection().getRangeAt(0);
+                    if (frameDocument.getSelection().rangeCount){
+                        selectedText = frameDocument.getSelection().getRangeAt(0);
+                        // in IE, sometimes the whole html will be selected
+                        if (selectedText.startContainer.nodeName.toLowerCase() == 'html'
+                            && selectedText.endContainer.nodeName.toLowerCase() == 'html'){
+                            var sel = frameDocument.getSelection();
+                            sel.removeAllRanges();
+                            // so only select the body
+                            var bodyRange = frameDocument.createRange();
+                            bodyRange.setStart(frameDocument.body, 0);
+                            bodyRange.setEnd(frameDocument.body, frameDocument.body.children.length);
+                            sel.addRange(bodyRange);
+                            selectedText = frameDocument.getSelection().getRangeAt(0);
+                        }
+                        console.log(selectedText);
+                    }
                     
                     $('.lEditor-font-div, .lEditor-color-div, .lEditor-link-div').slideUp(200, function(){
                         $(this).remove();
@@ -568,6 +584,12 @@
                         fontItem.click(function(){
                             var fontCss = $(this).css('font-family');
                             var fontName = $(this).text();
+                            // for IE
+                            var sel = frameDocument.getSelection();
+                            if (!sel || sel.anchorOffset === 0) {
+                                sel.removeAllRanges();
+                                sel.addRange(selectedText);
+                            }
                             frameDocument.execCommand('fontName', false, fontCss);
                             lfontPicker.find('.lEditor-font-text').text(fontName);
                             fontPickerDiv.slideUp(200, function(){
@@ -590,6 +612,12 @@
                         // set click listener to each list item
                         fontItem.click(function(){
                             var sizeName = $(this).text();
+                            // for IE
+                            var sel = frameDocument.getSelection();
+                            if (!sel || sel.anchorOffset === 0) {
+                                sel.removeAllRanges();
+                                sel.addRange(selectedText);
+                            }
                             frameDocument.execCommand('fontSize', false, sizeName);
                             lfontSizePicker.find('.lEditor-font-text').text(sizeName);
                             fontSizePickerDiv.slideUp(200, function(){
@@ -610,6 +638,12 @@
                         var colorBox = $('<div class="lEditor-color-box" style="background-color:' + colors[c] + '"></div');
                         colorBox.click(function(){
                             var color = $(this).css('background-color');
+                            // for IE
+                            var sel = frameDocument.getSelection();
+                            if (!sel || sel.anchorOffset === 0) {
+                                sel.removeAllRanges();
+                                sel.addRange(selectedText);
+                            }
                             frameDocument.execCommand(e.data.type, false, color);
                             lbuttonColor.css('color', color);
                             colorPickerDiv.slideUp(200, function(){
@@ -640,12 +674,11 @@
                     linkOKButton.click(function(){
                         var url = linkUrl.val(),
                             sel = frameDocument.getSelection();
-                        // for opera and IE
-//                        if (sel.rangeCount === 0) {
-//                            console.log("aaa");
-//                            sel.removeAllRanges();
-//                            sel.addRange(selectedText);
-//                        }
+                        // for IE
+                        if (!sel || sel.anchorOffset === 0) {
+                            sel.removeAllRanges();
+                            sel.addRange(selectedText);
+                        }
                         if (url){
                             if (!(url.startsWith('http://') || url.startsWith('https://')))
                                 url = 'http://' + url;
@@ -672,13 +705,14 @@
                         var url = linkUrl.val(),
                             sel = frameDocument.getSelection();
                         // for opera and IE
-//                        if (!sel || sel.anchorOffset === 0) {
-//                            sel.removeAllRanges();
-//                            sel.addRange(selectedText);
-//                        }
+                        if (!sel || sel.anchorOffset === 0) {
+                            sel.removeAllRanges();
+                            sel.addRange(selectedText);
+                        }
                         if (url){
                             if (!(url.startsWith('http://') || url.startsWith('https://')))
                                 url = 'http://' + url;
+                            frameDocument.focus();
                             frameDocument.execCommand('insertImage', false, url);
                         }
                         linkDiv.slideUp(200, function(){
@@ -693,11 +727,6 @@
                 },
                 insertBlock: function(e){
                     var sel = frameDocument.getSelection();
-                    // for opera and IE
-//                    if (!sel || sel.anchorOffset === 0) {
-//                        sel.removeAllRanges();
-//                        sel.addRange(selectedText);
-//                    }
                     if (sel.getRangeAt && sel.rangeCount){
                         range = sel.getRangeAt(0);
                         var snodeName = range.startContainer.nodeName.toLowerCase();
