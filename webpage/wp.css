@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Open Sans Light';
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 300;
   src: url(OpenSans-Light.ttf);
@@ -44,25 +44,26 @@ nav {
     height: 60px;
     text-transform: uppercase;
     cursor: pointer;
+    border-bottom: 2px solid #9b9b9b;
     transition: all 0.2s;
 }
 
 .nav-item:hover {
-    border-bottom: 2px solid #179dff;
+    border-bottom-color: #179dff;
 }
 
 .nav-item a {
     display: block;
     padding-top: 14px;
     text-decoration: none;
-    font-family: 'Open Sans Light';
+    font-weight: 300;
     color: #fff;
     font-size: 20px;
     height: 46px;
 }
 
 .nav-item:hover a {
-    font-family: 'Open Sans';
+    font-weight: 400;
     color: #179dff;
 }
 
@@ -78,7 +79,11 @@ nav {
     overflow: hidden;
 }
 
-h1 {font-family: 'Open Sans Light';font-size: 100px;margin: 40px 0 10px 0;}
+h1 {
+    font-weight: 300;
+    font-size: 100px;
+    margin: 40px 0 10px 0;
+}
 
 h2 {
     display: inline-block;
@@ -92,7 +97,7 @@ h2 {
 
 p {font-size: 20px;}
 
-#subtitle{font-family: 'Open Sans Light';}
+#subtitle{font-weight: 400;}
 
 #container {
     margin: 40px auto;
