@@ -640,13 +640,12 @@
                     linkOKButton.click(function(){
                         var url = linkUrl.val(),
                             sel = frameDocument.getSelection();
-                        console.log(sel);
                         // for opera and IE
-                        if (sel.rangeCount === 0) {
-                            console.log("aaa");
-                            sel.removeAllRanges();
-                            sel.addRange(selectedText);
-                        }
+//                        if (sel.rangeCount === 0) {
+//                            console.log("aaa");
+//                            sel.removeAllRanges();
+//                            sel.addRange(selectedText);
+//                        }
                         if (url){
                             if (!(url.startsWith('http://') || url.startsWith('https://')))
                                 url = 'http://' + url;
@@ -710,7 +709,6 @@
                     }
                     sel += '<br>';
                     var codeHtml = '<'+e.data.type+'>' + sel + '</'+e.data.type+'>';
-                    console.log(codeHtml);
                     utils.insertHTML(frameWindow, frameDocument, codeHtml);
                 },
                 removeFormat: function(){
