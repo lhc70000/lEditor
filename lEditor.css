@@ -44,8 +44,6 @@ body.fullscreen-mode {
 
 .lEditor-button {
     display: inline-block;
-/*    width: 20px;*/
-/*    height: 16px;*/
     margin: 0 1px;
     padding: 2px 6px;
     text-align: center;
@@ -77,25 +75,12 @@ body.fullscreen-mode {
 }
 
 /* font */
-
-.lEditor-font-container {
-    display: inline-block;
-    margin: 0 1px;
-    vertical-align: middle;
-}
-
 .lEditor-font-text {
     display: inline-block;
     font-size: 14px;
     margin: 0;
-    padding: 2px 0;
-    vertical-align: middle;
     overflow: hidden;
     white-space: nowrap;
-}
-
-.lEditor-font-text:focus {
-    
 }
 
 .lEditor-font-div {
