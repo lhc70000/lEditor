@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lEditor</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="lEditor.js"></script>
+    <script>
+        $(window).load(function(){
+            $('#container').lEditor({
+                height:'300px',
+                full_screen: true,
+                about: 'on'
+            });
+            $('#demo1').lEditor({
+                tab: 'off',
+                height: '150px',
+                toolbar: ['undo', 'style', 'link'],
+                font: 'Georgia',
+                textarea_bg_color: '#2e2e2e',
+                toolbar_bg_color: '#525151',
+                toolbar_color: '#4bd7ea',
+                color: '#fff',
+                callback: function(str){
+                    $('#demo1-code').val(str);
+                }
+            });
+        });
+    </script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="webpage/wp.css" />
+    <link rel="stylesheet" href="lEditor.css" />
+</head>
+<body>
+    <a name="Top"></a>
+    <nav>
+        <div class="nav-item"><a href="#Top">Top</a></div>
+        <div class="nav-item"><a href="#Usage">Usage</a></div>
+        <div class="nav-item"><a href="#Options">Options</a></div>
+        <div class="nav-item"><a href="#Demo">Demo</a></div>
+        <div class="nav-item"><a href="#About">About</a></div>
+    </nav>
+    <div id="main">
+    <h1>lEditor</h1>
+    <p id="subtitle">A clean web text editor</p>
+    <div id="container"></div>
+    
+    <div id="Usage" class="anchor"></div>
+    <h2>Usage</h2>
+    <div class="contents" style="width:500px;">
+        <p>0. It uses jQuery</p>
+        <p>1. Include <code>lEditor.js</code> and <code>lEditor.css</code></p>
+        <p>2. Bind <code>$(a-div).lEditor();</code> to onload event</p>
+        <p>3. It's possible to add more options:
+        <pre>$(a-div).lEditor({
+    height: '300px',
+    color: '#ff0'
+});</pre></p>
+    </div>
+    <div id="Options" class="anchor"></div>
+    <h2>Options</h2>
+    <div class="contents" style="width:700px;">
+    <dl>
+        <h3>editor appearance</h3>
+        <dt>height</dt> <dd>a css size string, the total height of the editor, default is <code>200px</code></dd><br>
+        <dt>textarea_bg_color</dt> <dd>background color for the text area, default is <code>#fff</code></dd><br>
+        <dt>toolbar_color</dt> <dd>button color, default is <code>#444</code></dd><br>
+        <dt>toolbar_bg_color</dt> <dd>background color for the toolbar, default is <code>#ddd</code></dd><br>
+        
+        <h3>text initialization</h3>
+        <dt>text</dt> <dd>initial text in the editor. HTML tags are also ok.</dd><br>
+        <dt>font</dt> <dd>initial text font, default is <code>Arial</code></dd><br>
+        <dt>font_size</dt> <dd>initial text font size, a number from 1 - 7, default is 4.</dd><br>
+        <dt>color</dt> <dd>initial text color, default is <code>#000</code></dd><br>
+        <dt>bg_color</dt> <dd>initial text background color, default is <code>#fff</code></dd><br>
+        
+        <h3>toolbar buttons</h3>
+        <dt>toolbar</dt> 
+        <dd>
+        layout of button groups in the toolbar, default layout is the same as the top one. It accecpts an array of strings. possible strings:<br>
+        <div style="width: 500px;margin:10px auto;line-height:28px;"> 
+            <code>undo</code>  ( undo / redo )<br>
+            <code>heading</code>  ( heading )<br>
+            <code>font</code>  ( name / size ) <br>
+            <code>style</code>  ( b / i / u ) <br>
+            <code>color</code>  ( fore / background )<br>
+            <code>align</code>  ( left / center / right ) <br>
+            <code>list</code>  ( ul / ol ) <br>
+            <code>link</code>  ( add / remove )<br>
+            <code>media</code>  ( img )<br>
+            <code>textblock</code> ( hr / quote / code )<br>
+            <code>remove</code> ( clear format / clear all )
+        </div>
+        </dd>
+        <dt>button_size</dt> <dd>a css size string for the button size, default is <code>14px</code></dd><br>
+        <dt>full_screen</dt> <dd>true/ false, enable full screen mode. A full screen button will show in the toolbar. Default is false.</dd><br>
+        <dt>tab</dt> <dd>'off' / 'on', button groups will be put into different tab pages automatically. Useful when there are too much buttons. Default is <code>'on'</code></dd><br>
+        <dt>about</dt> <dd>'off' / 'on', add an "about" tab showing about information. Default is <code>'off'</code></dd>
+        
+        <h3>getting the text</h3>
+        <dt>callback</dt> <dd>a function called when text changes. the function accepts a parameter which is the html code of the text.</dd>
+    </dl>
+    </div>
+    <div id="Demo" class="anchor"></div>
+    <h2>Demo</h2>
+    <div class="demo-code">
+        <pre>
+$('#demo1').lEditor({
+    tab: 'off',
+    height: '150px',
+    toolbar: ['undo', 'style', 'link'],
+    font: 'Georgia',
+    textarea_bg_color: '#2e2e2e',
+    toolbar_bg_color: '#525151',
+    toolbar_color: '#4bd7ea',
+    color: '#fff',
+    callback: function(str){
+        $('#demo1-code').val(str);
+    }
+});</pre>
+   </div>
+    <div class="demo-container">
+        <div id="demo1"></div>
+        <textarea id="demo1-code"></textarea>
+    </div>
+    <div id="About" class="anchor"></div>
+    </div>
+    <p></p>
+    <footer>
+        by lhc (lhc199652@gmail.com) | <a href="//github.com/lhc70000/lEditor">View on github</a>
+    </footer>
+</body>
+</html>
