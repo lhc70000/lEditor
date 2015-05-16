@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lEditor</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="lEditor.js"></script>
+    <script>
+        $(window).load(function(){
+            $('#demo-main').lEditor({
+                height:'300px',
+                full_screen: true,
+                about: 'on'
+            });
+            $('#demo1').lEditor({
+                tab: 'off',
+                height: '150px',
+                toolbar: ['undo', 'style', 'link'],
+                font: 'Georgia',
+                toolbar_bg_color: '#f8f8f8',
+                toolbar_color: '#179dff',
+                color: '#1591ec',
+                callback: function(str){
+                    $('#demo1-code').val(str);
+                }
+            });
+        });
+    </script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/wp.css" />
+    <link rel="stylesheet" href="lEditor.css" />
+</head>
+<body>
+    <a name="Top"></a>
+    <nav>
+        <div class="nav-item"><a href="#Top">Top</a></div>
+        <div class="nav-item"><a href="#Usage">Usage</a></div>
+        <div class="nav-item"><a href="#Options">Options</a></div>
+        <div class="nav-item"><a href="#Demo">Demo</a></div>
+        <div class="nav-item"><a href="#About">About</a></div>
+    </nav>
+    <div id="main">
+        <!-- title div -->
+        <div id="title-div">
+            <h1>lEditor</h1>
+            <p id="sub-title">A <b>clean</b> web text editor</p>
+            <div id="github-button"><a href="//github.com/lhc70000/lEditor">View on github</a></div>
+            <div id="demo-main"></div>
+        </div>
+        <!-- usage div -->
+        <div id="Usage" class="anchor"></div>
+        <div id="usage-div">
+            <div class="container">
+                <h2>Usage</h2>
+                <ol start="0">
+                <li>It uses jQuery</li>
+                <li>Include <code>lEditor.js</code> and <code>lEditor.css</code></li>
+                <li>Bind <code>$(some-div).lEditor();</code> to onload event</li>
+                <li>It's possible to add more options:
+                <pre>
+$(some-div).lEditor({
+    height: '300px',
+    color: '#ff0'
+});</pre></li>
+                </ol>
+            </div>
+        </div>
+        <!-- options div -->
+        <div id="Options" class="anchor"></div>
+        <div id="options-div">
+            <div class="container">
+                <h2>Options</h2>
+                <dl>
+                    <h3>editor appearance</h3>
+                    <dt>height</dt> <dd>a css size string, the total height of the editor, default is <code>200px</code>.</dd><br>
+                    <dt>textarea_bg_color</dt> <dd>background color for the text area, default is <code>#fff</code>.</dd><br>
+                    <dt>toolbar_color</dt> <dd>button color, default is <code>#444</code></dd>.<br>
+                    <dt>toolbar_bg_color</dt> <dd>background color for the toolbar, default is <code>#ddd</code>.</dd><br>
+
+                    <h3>text initialization</h3>
+                    <dt>text</dt> <dd>initial text in the editor. HTML tags are also ok.</dd><br>
+                    <dt>font</dt> <dd>initial text font, default is <code>Arial</code>.</dd><br>
+                    <dt>font_size</dt> <dd>initial text font size, a number from 1 - 7, default is 4.</dd><br>
+                    <dt>color</dt> <dd>initial text color, default is <code>#000</code></dd>.<br>
+                    <dt>bg_color</dt> <dd>initial text background color, default is <code>#fff</code>.</dd><br>
+
+                    <h3>toolbar buttons</h3>
+                    <dt>toolbar</dt> 
+                    <dd>
+                    layout of button groups in the toolbar, default layout is the same as the top one. It accecpts an array of strings. Possible strings are:<br>
+                    <div id="toolbar-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>String</th>
+                                    <th>Buttons</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>undo</code></td>
+                                    <td>undo, redo</td>
+                                </tr>
+                                <tr>
+                                    <td><code>heading</code></td>
+                                    <td>heading</td>
+                                </tr>
+                                <tr>
+                                    <td><code>font</code></td>
+                                    <td>font name, font size</td>
+                                </tr>
+                                <tr>
+                                    <td><code>style</code></td>
+                                    <td>bold, italic, underline</td>
+                                </tr>
+                                <tr>
+                                    <td><code>color</code></td>
+                                    <td>text color, background color</td>
+                                </tr>
+                                <tr>
+                                    <td><code>align</code></td>
+                                    <td>left, center, right</td>
+                                </tr>
+                                <tr>
+                                    <td><code>list</code></td>
+                                    <td>ul, ol</td>
+                                </tr>
+                                <tr>
+                                    <td><code>link</code></td>
+                                    <td>add, remove</td>
+                                </tr>
+                                <tr>
+                                    <td><code>media</code></td>
+                                    <td>image</td>
+                                </tr>
+                                <tr>
+                                    <td><code>textblock</code></td>
+                                    <td>hr, quote, code</td>
+                                </tr>
+                                <tr>
+                                    <td><code>remove</code></td>
+                                    <td>clear format, clear all</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </dd>
+                    <dt>button_size</dt> <dd>a css size string for the button size, default is <code>14px</code>.</dd><br>
+                    <dt>full_screen</dt> <dd>true/ false, enable full screen mode. A full screen button will show in the toolbar. Default is false.</dd><br>
+                    <dt>tab</dt> <dd>'off' / 'on', button groups will be put into different tab pages automatically. Useful when there are too much buttons. Default is <code>'on'</code></dd><br>
+                    <dt>about</dt> <dd>'off' / 'on', add an "about" tab showing about information. Default is <code>'off'</code>.</dd>
+
+                    <h3>getting the text</h3>
+                    <dt>callback</dt> <dd>a function called when text changes. the function accepts a parameter which is the html code of the text.</dd>
+                </dl>
+            </div>
+        </div>
+        <!-- demo div -->
+        <div id="Demo" class="anchor"></div>
+        <div id="demo-div">
+            <div class="container">
+                <h2>Demo</h2>
+                <div id="demo1-dontainer">
+                    <pre>
+$('#demo1').lEditor({
+    tab: 'off',
+    height: '150px',
+    toolbar: ['undo', 'style', 'link'],
+    font: 'Georgia',
+    textarea_bg_color: '#2e2e2e',
+    toolbar_bg_color: '#525151',
+    toolbar_color: '#4bd7ea',
+    color: '#fff',
+    callback: function(str){
+        $('#demo1-code').val(str);
+    }
+});</pre>
+                    <div id="demo1"></div>
+                    <textarea id="demo1-code"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">by lhc (lhc199652@gmail.com)</a></div>
+    </footer>
+</body>
+</html>
