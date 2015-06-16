@@ -1,12 +1,12 @@
 /**
  * lEditor
- * v 0.5.4
+ * v 0.5.5
  * by lhc (lhc199652@gmail.com)
  */
 
 (function (window, document, undefined) {
     
-    var version = '0.5.4';
+    var version = '0.5.5';
     
     /* presets for fonts */
     var fonts = {
@@ -782,8 +782,8 @@
                 fullScreen: function () {
                     $('body').addClass('fullscreen-mode');
                     var size = {
-                        height: $(document).height(),
-                        width: $(document).width()
+                        height: $(window).height(),
+                        width: $(window).width()
                     };
                     var fullScreenDiv = $('<div class="lEditor-full-div"></div>');
                     fullScreenDiv.css({
@@ -800,6 +800,7 @@
                         height: size.height + 'px',
                         textarea_bg_color: '#f0efd6',
                         toolbar_bg_color: '#dedece',
+                        toolbar: opToolBar,
                         about: 'on',
                         text: HTMLCode,
                         father_document: frameDocument
